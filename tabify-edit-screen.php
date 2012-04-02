@@ -8,14 +8,6 @@ Version: 0.1
 Author URI: http://markoheijnen.com
 */
 
-/*
- * TODO
- * - Better UI admin
- * - Know when a metabox is disabled/enabled
- * - Let user be able to move meta boxes to a different tab
- * 
- */
-
 include 'inc/admin.php';
 include 'inc/tabs.php';
 

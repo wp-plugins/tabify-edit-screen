@@ -1,6 +1,6 @@
 === Plugin Name ===
 Contributors: markoheijnen
-Donate link: http://wp-rockstars.com/plugins/tabify-edit-screen/donate/
+Donate link: http://wp-rockstars.com/plugins/tabify-edit-screen/
 Tags: tabs, edit
 Requires at least: 3.3
 Tested up to: 3.4
@@ -12,6 +12,9 @@ Enables tabs in the edit screen and manage them from the back-end
 
 You ever came in a situation where the edit screen of a post type get to full that you sometimes had to search the right metabox?
 This plugin enables tabs in the edit screen and manage them from the back-end.
+
+It's still in development and does has some issues with managing the tabs. Still will get solved in the next weeks.
+Also at this moment it ignores the "Show on screen" values from the Screen options.
 
 == Installation ==
 
@@ -34,4 +37,6 @@ Will come when people ask questions in the forum
 
 == TODO's ==
 
-Not yet
+* Better UI admin
+* Know when a metabox is showed from the screen options
+* Let user be able to move meta boxes to a different tab

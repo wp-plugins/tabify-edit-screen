@@ -4,11 +4,21 @@ class Tabify_Edit_Screen_Admin {
 	private $metaboxes = array();
 	private $tabs;
 
-	function admin_menu() {
+	/**
+	 * Adds a option page
+	 *
+	 * @since 0.1
+	 */
+	public function admin_menu() {
 		add_options_page( __( 'Tabify edit screen', 'tabify-edit-screen' ), __( 'Tabify edit screen', 'tabify-edit-screen' ), 'manage_options', 'tabify-edit-screen', array( &$this, 'edit_screen' ) );
 	}
-	
-	function edit_screen() {
+
+	/**
+	 * Option page that handles the form request
+	 *
+	 * @since 0.1
+	 */
+	public function edit_screen() {
 		if ( ! current_user_can( 'manage_options' ) ) {
 			wp_die( __( 'You do not have sufficient permissions to manage options for this site.' ) );
 		}
@@ -21,9 +31,11 @@ class Tabify_Edit_Screen_Admin {
 		screen_icon();
 		echo '<h2>' . esc_html( get_admin_page_title() ) . '</h2>';
 
-		//delete_option( 'tabify-edit-screen' );
 		if( $_SERVER['REQUEST_METHOD'] == 'POST' && isset( $_POST['tabify'] ) ) {
-			update_option( 'tabify-edit-screen', $_POST['tabify'] );
+			$options = $_POST['tabify'];
+			$this->escape( $options );
+
+			update_option( 'tabify-edit-screen', $options );
 		}
 
 		echo '<form method="post">';
@@ -37,6 +49,39 @@ class Tabify_Edit_Screen_Admin {
 		echo '</div>';
 	}
 
+	/**
+	 * Sanitize string or array of strings for database.
+	 *
+	 * @since 0.2
+	 *
+	 * @param string|array $array Sanitize single string or array of strings.
+	 * @return string|array Type matches $array and sanitized for the database.
+	 */
+	function escape( &$array ) {
+		global $wpdb;
+
+		if ( ! is_array( $array ) ) {
+			return esc_attr( wp_strip_all_tags( $array ) );
+		}
+		else {
+			foreach ( (array) $array as $k => $v ) {
+				if ( is_array( $v ) ) {
+					$this->escape( $array[ $k ] );
+				}
+				else {
+					$array[$k] = esc_attr( wp_strip_all_tags( $v ) );
+				}
+			}
+		}
+	}
+
+	/**
+	 * Gets all the post types
+	 *
+	 * @since 0.1
+	 *
+	 * @return array All post types that are showed from the backend.
+	 */
 	private function get_posttypes() {
 		$args = array(
 			'show_ui' => 'true'
@@ -53,11 +98,21 @@ class Tabify_Edit_Screen_Admin {
 		return $posttypes;
 	}
 
+	/**
+	 * Echo the tabs for the settings page
+	 *
+	 * @since 0.1
+	 */
 	private function get_tabs( $posttypes ) {
 		$this->tabs = new Tabify_Edit_Screen_Tabs( $posttypes );
 		echo $this->tabs->get_tabs_with_container();
 	}
 
+	/**
+	 * Echo all the metaboxes
+	 *
+	 * @since 0.1
+	 */
 	private function get_metaboxes( $posttypes ) {
 		$metaboxes = $this->initialize_metaboxes( $posttypes );
 		$options = get_option( 'tabify-edit-screen', array() );
@@ -143,8 +198,10 @@ class Tabify_Edit_Screen_Admin {
 		}
 	}
 
-	/*
-	 * Little bit hackish but it works. Hopefully one day there will be a method for this in core.
+	/**
+	 * Gets all the metaboxes that are registered
+	 *
+	 * @since 0.1
 	 */
 	private function initialize_metaboxes( $posttypes ) {
 		if( ! $this->metaboxes ) {
@@ -180,6 +237,12 @@ class Tabify_Edit_Screen_Admin {
 		return $this->metaboxes;
 	}
 
+	/**
+	 * Gets all the default WordPress metaboxes
+	 * Little bit hackish but it works. Hopefully one day there will be a method for this in core.
+	 *
+	 * @since 0.1
+	 */
 	private function load_default_metaboxes( $post_type ) {
 		add_meta_box( 'submitdiv', __('Publish'), 'post_submit_meta_box', $post_type, 'side', 'core' );
 

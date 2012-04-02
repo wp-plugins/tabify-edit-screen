@@ -1,0 +1,7 @@
+.tabifybox-hide { display: none; }
+
+/*.postbox-container .meta-box-sortables.empty-container,*/
+#side-sortables.empty-container {
+	border: 0px;
+	height: auto;
+}

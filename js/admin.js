@@ -17,7 +17,7 @@ jQuery(function($) {
 		}
 	});
 
-	$( "#create_tab" ).on("click", function(){
+	$( "#create_tab" ).on("click", function() {
 		var title = 'Choose title';
 		var posttype = $( '.nav-tab-active' ).attr( 'id' );
 		posttype = posttype.replace( 'tab-', "");

@@ -152,7 +152,7 @@ class Tabify_Edit_Screen_Admin {
 				$checked = ' checked="checked"';
 			}
 
-			echo '<div id="tabifybox-options">';
+			echo '<div class="tabifybox-options">';
 			echo '<p><input type="checkbox" name="tabify[' . $name . '][show]" value="1" ' . $checked . '/> ' . __( 'Show tabs in this post type.', 'tabify-edit-screen' ) . '</p>';
 			echo '</div>';
 
@@ -201,13 +201,13 @@ class Tabify_Edit_Screen_Admin {
 
 			echo '</div>';
 
-			echo '<p class="submit">';
-			echo '<input type="button" id="create_tab" class="button-secondary" value="' . __( 'Create a new tab', 'tabify_edit_screen' ) . '" />';
-			submit_button( '', 'primary', 'submit', false );
-			echo '</p>';
-
 			echo '</div>';
 		}
+
+		echo '<p class="submit">';
+		echo '<input type="button" id="create_tab" class="button-secondary" value="' . __( 'Create a new tab', 'tabify_edit_screen' ) . '" />';
+		submit_button( '', 'primary', 'submit', false );
+		echo '</p>';
 	}
 
 	/**

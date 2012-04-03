@@ -22,6 +22,8 @@ class Tabify_Edit_Screen_Admin {
 		if ( ! current_user_can( 'manage_options' ) ) {
 			wp_die( __( 'You do not have sufficient permissions to manage options for this site.' ) );
 		}
+		
+		$this->update_settings();
 
 		wp_register_script( 'tabify-edit-screen-admin', plugins_url( '/js/admin.js', dirname( __FILE__ ) ), array( 'jquery', 'jquery-ui-sortable' ), '1.0' );
 		wp_enqueue_script( 'tabify-edit-screen-admin' );
@@ -31,14 +33,8 @@ class Tabify_Edit_Screen_Admin {
 		screen_icon();
 		echo '<h2>' . esc_html( get_admin_page_title() ) . '</h2>';
 
-		if( $_SERVER['REQUEST_METHOD'] == 'POST' && isset( $_POST['tabify'] ) ) {
-			$options = $_POST['tabify'];
-			$this->escape( $options );
-
-			update_option( 'tabify-edit-screen', $options );
-		}
-
 		echo '<form method="post">';
+		wp_nonce_field( plugin_basename( __FILE__ ), 'tabify_edit_screen_nonce' );
 
 		$posttypes = $this->get_posttypes();
 		$this->get_tabs( $posttypes );
@@ -50,6 +46,22 @@ class Tabify_Edit_Screen_Admin {
 	}
 
 	/**
+	 * Updates settings
+	 *
+	 * @since 0.2
+	 *
+	 */
+
+	private function update_settings() {
+		if( $_SERVER['REQUEST_METHOD'] == 'POST' && isset( $_POST['tabify'] ) && check_admin_referer( plugin_basename( __FILE__ ), 'tabify_edit_screen_nonce' ) ) {
+			$options = $_POST['tabify'];
+			$this->escape( $options );
+
+			update_option( 'tabify-edit-screen', $options );
+		}
+	}
+
+	/**
 	 * Sanitize string or array of strings for database.
 	 *
 	 * @since 0.2
@@ -57,7 +69,7 @@ class Tabify_Edit_Screen_Admin {
 	 * @param string|array $array Sanitize single string or array of strings.
 	 * @return string|array Type matches $array and sanitized for the database.
 	 */
-	function escape( &$array ) {
+	private function escape( &$array ) {
 		global $wpdb;
 
 		if ( ! is_array( $array ) ) {

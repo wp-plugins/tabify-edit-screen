@@ -7,5 +7,6 @@ jQuery(function($) {
 		var id = evt.target.id.replace( 'tab-', "");
 		$( ".tabifybox" ).hide();
 		$( ".tabifybox-" + id ).show();
+		$( "#current_tab" ).val( id );
 	});
 });

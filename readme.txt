@@ -32,6 +32,13 @@ Will come when people ask questions in the forum
 
 == Changelog ==
 
+= 0.2 =
+* Added security checks on the setting screen
+* Create new tab now also works on all post types
+* When you save the changes go back to the selected tab
+* Setting page works when javascript isn't supported (need fix)
+* You can now delete a tab when all the metaboxes are removed. Will be improved in later version (need fix)
+
 = 0.1 =
 * First version to show people the possibilities
 
@@ -40,3 +47,4 @@ Will come when people ask questions in the forum
 * Better UI admin
 * Know when a metabox is showed from the screen options
 * Let user be able to move meta boxes to a different tab
+* Improve deleting a tab from the setting screen

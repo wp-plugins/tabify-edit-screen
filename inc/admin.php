@@ -161,7 +161,7 @@ class Tabify_Edit_Screen_Admin {
 			$i = 0;
 			foreach( $options[ $name ]['tabs'] as $tab ) {
 				echo '<div>';
-				echo '<h2><span>' . $tab['title'] . '</span><input type="text" name="tabify[' . $name . '][tabs][' . $i . '][title]" value="' . $tab['title'] . '" style="display: none;" /></h2>';
+				echo '<h2><span class="tabify-title">' . $tab['title'] . '</span><input type="text" name="tabify[' . $name . '][tabs][' . $i . '][title]" value="' . $tab['title'] . '" class="tabify-title-input" /></h2>';
 				echo '<ul style="margin: 0px; padding: 6px 0px 0px;">';
 				if( isset( $tab['metaboxes'] ) ) {
 					foreach( $tab['metaboxes'] as $metabox_id => $metabox_title ) {

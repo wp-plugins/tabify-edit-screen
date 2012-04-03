@@ -18,8 +18,10 @@ jQuery(function($) {
 	});
 
 	$( "#create_tab" ).on("click", function() {
+		alert('clock');
 		var title = 'Choose title';
 		var posttype = $( '.nav-tab-active' ).attr( 'id' );
+		alert( posttype );
 		posttype = posttype.replace( 'tab-', "");
 		var counter = $( '.tabifybox-' + posttype + ' .tabify_control' ).children().length;
 

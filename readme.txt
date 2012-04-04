@@ -48,16 +48,3 @@ Will come when people ask questions in the forum
 * Know when a metabox is showed from the screen options
 * Let user be able to move meta boxes to a different tab
 * Improve deleting a tab from the setting screen
-
-
-
-
-
-
-Klacht.
-brief insturen door wie ik gebeld ben, wanneer, waarover de klacht gaat en wat ik wilde bereiken.
-
-eigen belastingkantoor overzicht betalingen
-welke aanslagen ik de overzicht wil hebben
-
-ingezonden aangiften -> schriftelijk aanvragen

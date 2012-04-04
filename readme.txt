@@ -24,7 +24,11 @@ Also at this moment it ignores the "Show on screen" values from the Screen optio
 
 == Frequently Asked Questions ==
 
-Will come when people ask questions in the forum
+= Can you define metaboxes that will always be visible =
+
+At this moment the title and submit box are always visible. You can change this by using the following filters:
+ * tabify_default_metaboxes - $defaults, $post_type
+ * tabify_default_metaboxes_$post_type - $defaults
 
 == Screenshots ==
 
@@ -37,7 +41,7 @@ Will come when people ask questions in the forum
 * Create new tab now also works on all post types
 * When you save the changes go back to the selected tab
 * Setting page works when javascript isn't supported (need fix)
-* You can now delete a tab when all the metaboxes are removed. Will be improved in later version (need fix)
+* You can now delete a tab when all the metaboxes are removed and the title is empty. Will be improved in later version
 
 = 0.1 (2012-4-2) =
 * First version to show people the possibilities

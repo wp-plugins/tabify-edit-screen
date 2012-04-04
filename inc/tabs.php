@@ -64,8 +64,9 @@ class Tabify_Edit_Screen_Tabs {
 		return $return;
 	}
 
-	public function get_default_metaboxes() {
+	public function get_default_metaboxes( $post_type = '' ) {
 		$defaults = array( 'titlediv', 'submitdiv' ); //, 'postdivrich'
-		return apply_filters( 'tabify_default_metaboxes', $defaults );
+		$defaults = apply_filters( 'tabify_default_metaboxes', $defaults, $post_type );
+		return apply_filters( 'tabify_default_metaboxes_' . $post_type , $defaults );
 	}
 }

@@ -36,7 +36,7 @@ class Tabify_Edit_Screen {
 
 		if( isset( $options[ $post_type ], $options[ $post_type ]['show'] ) && $options[ $post_type ]['show'] == 1 ) {
 			$this->editscreen_tabs = new Tabify_Edit_Screen_Tabs( $options[ $post_type ]['tabs'] );
-			$default_metaboxes = $this->editscreen_tabs->get_default_metaboxes();
+			$default_metaboxes = $this->editscreen_tabs->get_default_metaboxes( $post_type );
 
 			add_action( 'admin_print_footer_scripts', array( &$this, 'generate_javascript' ), 9 );
 

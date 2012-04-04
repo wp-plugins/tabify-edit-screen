@@ -182,15 +182,22 @@ class Tabify_Edit_Screen_Admin {
 
 				echo '<ul style="margin: 0px; padding: 6px 0px 0px;">';
 				if( isset( $tab['metaboxes'] ) ) {
-					foreach( $tab['metaboxes'] as $metabox_id => $metabox_title ) {
+					foreach( $tab['metaboxes'] as $metabox_id_fallback => $metabox_id ) {
+						if( intval( $metabox_id_fallback ) == 0 && $metabox_id_fallback != 0 ) {
+							$metabox_id = $metabox_id_fallback;
+						}
+						if( empty( $metabox_id ) ) {
+							continue;
+						}
+
 						$class = 'menu-item-handle';
 
 						if( in_array( $metabox_id, $default_metaboxes ) ) {
-							$class = ' tabifybox-hide';
+							$class = 'tabifybox-hide';
 						}
 
-						echo '<li class="' . $class . '">' . $metabox_title;
-						echo '<input type="hidden" name="tabify[' . $name . '][tabs][' . $i . '][metaboxes][' . $metabox_id  . ']" value="' . $metabox_title . '" />';
+						echo '<li class="' . $class . '">' . $metaboxes[ $name ][ $metabox_id ];
+						echo '<input type="hidden" name="tabify[' . $name . '][tabs][' . $i . '][metaboxes][]" value="' . $metabox_id . '" />';
 
 						echo '<span class="item-order hide-if-js">';
 						echo '<a href="';
@@ -229,11 +236,11 @@ class Tabify_Edit_Screen_Admin {
 							$class = 'menu-item-handle';
 	
 							if( in_array( $metabox_id, $default_metaboxes ) ) {
-								$class = ' tabifybox-hide';
+								$class = 'tabifybox-hide';
 							}
 	
 							echo '<li class="' . $class . '">' . $metabox_title;
-							echo '<input type="hidden" name="tabify[' . $name . '][tabs][' . $i . '][metaboxes][' . $metabox_id  . ']" value="' . $metabox_title . '" />';
+							echo '<input type="hidden" name="tabify[' . $name . '][tabs][' . $i . '][metaboxes][]" value="' . $metabox_id . '" />';
 							echo '</li>';
 						}
 					}

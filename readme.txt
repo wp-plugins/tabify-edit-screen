@@ -1,7 +1,7 @@
 === Plugin Name ===
 Contributors: markoheijnen
 Donate link: http://wp-rockstars.com/plugins/tabify-edit-screen/
-Tags: tabs, edit
+Tags: tabs, edit, admin, post, page
 Requires at least: 3.3
 Tested up to: 3.4
 Stable tag: 0.1

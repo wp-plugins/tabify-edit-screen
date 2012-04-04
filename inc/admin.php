@@ -51,40 +51,47 @@ class Tabify_Edit_Screen_Admin {
 	 * @since 0.2
 	 *
 	 */
-
 	private function update_settings() {
 		if( $_SERVER['REQUEST_METHOD'] == 'POST' && isset( $_POST['tabify'] ) && check_admin_referer( plugin_basename( __FILE__ ), 'tabify_edit_screen_nonce' ) ) {
 			$options = $_POST['tabify'];
-			$this->escape( $options );
+			$options = $this->escape( $options );
 
 			update_option( 'tabify-edit-screen', $options );
 		}
 	}
 
 	/**
-	 * Sanitize string or array of strings for database.
+	 * Sanitize the options array to be how we expect it to be
 	 *
 	 * @since 0.2
 	 *
-	 * @param string|array $array Sanitize single string or array of strings.
-	 * @return string|array Type matches $array and sanitized for the database.
+	 * @param array $posttypes Raw options array
+	 * @return array filtered options array
 	 */
-	private function escape( &$array ) {
-		global $wpdb;
+	private function escape( $posttypes ) {
+		$posttypes_keys = array_keys( $posttypes );
+		$amount_posttypes = count( $posttypes );
+		for( $i = 0; $i < $amount_posttypes; $i++ ) {
+			$key = $posttypes_keys[ $i ];
 
-		if ( ! is_array( $array ) ) {
-			return esc_attr( wp_strip_all_tags( $array ) );
-		}
-		else {
-			foreach ( (array) $array as $k => $v ) {
-				if ( is_array( $v ) ) {
-					$this->escape( $array[ $k ] );
-				}
-				else {
-					$array[$k] = esc_attr( wp_strip_all_tags( $v ) );
+			if( isset( $posttypes[ $key ]['show'] ) && $posttypes[ $key ]['show'] == 1 ) {
+				$posttypes[ $key ]['show'] = intval( $posttypes[ $key ]['show'] );
+			}
+			else {
+				$posttypes[ $key ]['show'] = 0;
+			}
+
+			$amount_tabs = count( $posttypes[ $key ]['tabs'] );
+			for( $j = 0; $j < $amount_tabs; $j++ ) {
+				$posttypes[ $key ]['tabs'][ $j ]['title'] = esc_attr( wp_strip_all_tags( $posttypes[ $key ]['tabs'][ $j ]['title'] ) );
+
+				if( $posttypes[ $key ]['tabs'][ $j ]['title'] == '' && count( $posttypes[ $key ]['tabs'][ $j ]['metaboxes'] ) == 0 ) {
+					unset( $posttypes[ $key ]['tabs'][ $j ] );
 				}
 			}
 		}
+
+		return $posttypes;
 	}
 
 	/**
@@ -167,7 +174,12 @@ class Tabify_Edit_Screen_Admin {
 			$i = 0;
 			foreach( $options[ $name ]['tabs'] as $tab ) {
 				echo '<div>';
+
+				if( $tab['title'] == '' ) {
+					$tab['title'] = __( 'Choose title' );
+				}
 				echo '<h2><span class="hide-if-no-js">' . $tab['title'] . '</span><input type="text" name="tabify[' . $name . '][tabs][' . $i . '][title]" value="' . $tab['title'] . '" class="hide-if-js" /></h2>';
+
 				echo '<ul style="margin: 0px; padding: 6px 0px 0px;">';
 				if( isset( $tab['metaboxes'] ) ) {
 					foreach( $tab['metaboxes'] as $metabox_id => $metabox_title ) {

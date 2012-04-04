@@ -1,4 +1,4 @@
-=== Plugin Name ===
+=== Tabify Edit Screen ===
 Contributors: markoheijnen
 Donate link: http://wp-rockstars.com/plugins/tabify-edit-screen/
 Tags: tabs, edit, admin, post, page
@@ -6,15 +6,16 @@ Requires at least: 3.3
 Tested up to: 3.4
 Stable tag: 0.1
 
-Enables tabs in the edit screen and manage them from the back-end
+Enable tabs in the edit screen and manage them from the back-end.
 
 == Description ==
 
-You ever came in a situation where the edit screen of a post type get to full that you sometimes had to search the right metabox?
-This plugin enables tabs in the edit screen and manage them from the back-end.
+When you've got lots of post meta-boxes, your post edit screen can become difficult to search. Make your post edit screen easier to navigate and manage by creating a set of tabs, with the Tabify Edit Screen plugin. And manage it all from the WordPress back-end!
 
-It's still in development. In general the plugin does the things it should do but there still are a lot of things that can be improved.
-Also at this moment it ignores the "Show on screen" values from the Screen options. What can be a big thing for some users
+The plugin is still in active development, and I'm always looking for ways to improve it. 
+
+Known issue: currently the plugin ignores the "show on screen" values from the Screen options. I'm currently working to fix this issue.
+
 
 == Installation ==
 
@@ -24,7 +25,7 @@ Also at this moment it ignores the "Show on screen" values from the Screen optio
 
 == Frequently Asked Questions ==
 
-= Can you define metaboxes that will always be visible =
+= Can you define metaboxes that will always be visible? =
 
 At this moment the title and submit box are always visible. You can change this by using the following filters:
  * tabify_default_metaboxes - $defaults, $post_type

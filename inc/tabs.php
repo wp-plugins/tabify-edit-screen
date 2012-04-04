@@ -31,7 +31,7 @@ class Tabify_Edit_Screen_Tabs {
 
 	public function get_tabs_with_container() {
 		$return  = '<h2 class="nav-tab-wrapper" style="padding-left: 20px;">';
-		$return .= '<input type="hidden" id="current_tab" name="tab" value="' . $key . '" />';
+		$return .= '<input type="hidden" id="current_tab" name="tab" value="' . $this->active. '" />';
 		$return .= $this->get_tabs();
 		$return .=  '</h2>';
 
@@ -63,7 +63,6 @@ class Tabify_Edit_Screen_Tabs {
 
 		return $return;
 	}
-
 
 	public function get_default_metaboxes() {
 		$defaults = array( 'titlediv', 'submitdiv' ); //, 'postdivrich'

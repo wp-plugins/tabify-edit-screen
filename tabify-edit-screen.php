@@ -33,10 +33,11 @@ class Tabify_Edit_Screen {
 		global $post_type;
 
 		$options = get_option( 'tabify-edit-screen', array() );
-		$this->editscreen_tabs = new Tabify_Edit_Screen_Tabs( $options[ $post_type ]['tabs'] );
-		$default_metaboxes = $this->editscreen_tabs->get_default_metaboxes();
 
 		if( isset( $options[ $post_type ], $options[ $post_type ]['show'] ) && $options[ $post_type ]['show'] == 1 ) {
+			$this->editscreen_tabs = new Tabify_Edit_Screen_Tabs( $options[ $post_type ]['tabs'] );
+			$default_metaboxes = $this->editscreen_tabs->get_default_metaboxes();
+
 			add_action( 'admin_print_footer_scripts', array( &$this, 'generate_javascript' ), 9 );
 
 			foreach( $options[ $post_type ]['tabs'] as $tab_index => $tab ) {

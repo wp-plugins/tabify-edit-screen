@@ -131,6 +131,12 @@ class Tabify_Edit_Screen_Admin {
 
 		$default_metaboxes = $this->tabs->get_default_metaboxes();
 
+		$removed_args = array(
+			'action',
+			'menu-item',
+			'_wpnonce',
+		);
+
 		foreach( $posttypes as $name => $label ) {
 			if( !isset( $options[ $name ] ) ) {
 				$options[ $name ] = array (
@@ -161,7 +167,7 @@ class Tabify_Edit_Screen_Admin {
 			$i = 0;
 			foreach( $options[ $name ]['tabs'] as $tab ) {
 				echo '<div>';
-				echo '<h2><span class="tabify-title">' . $tab['title'] . '</span><input type="text" name="tabify[' . $name . '][tabs][' . $i . '][title]" value="' . $tab['title'] . '" class="tabify-title-input" /></h2>';
+				echo '<h2><span class="hide-if-no-js">' . $tab['title'] . '</span><input type="text" name="tabify[' . $name . '][tabs][' . $i . '][title]" value="' . $tab['title'] . '" class="hide-if-js" /></h2>';
 				echo '<ul style="margin: 0px; padding: 6px 0px 0px;">';
 				if( isset( $tab['metaboxes'] ) ) {
 					foreach( $tab['metaboxes'] as $metabox_id => $metabox_title ) {
@@ -173,6 +179,34 @@ class Tabify_Edit_Screen_Admin {
 
 						echo '<li class="' . $class . '">' . $metabox_title;
 						echo '<input type="hidden" name="tabify[' . $name . '][tabs][' . $i . '][metaboxes][' . $metabox_id  . ']" value="' . $metabox_title . '" />';
+
+						echo '<span class="item-order hide-if-js">';
+						echo '<a href="';
+						echo wp_nonce_url(
+							add_query_arg(
+								array(
+									'action' => 'tabify-item-move-up',
+									'menu-item' => $name . '-' . $i . '-' . $metabox_id,
+								),
+								remove_query_arg($removed_args, $_SERVER["REQUEST_URI"] )
+							),
+							'move-menu_item'
+						);
+						echo '" class="item-move-up"><abbr title="' . esc_attr__( 'Move up' ) . '">&#8593;</abbr></a>';
+						echo ' | ';
+						echo '<a href="';
+						echo wp_nonce_url(
+							add_query_arg(
+								array(
+									'action' => 'tabify-item-move-down',
+									'menu-item' => $name . '-' . $i . '-' . $metabox_id,
+								),
+								remove_query_arg( $removed_args, $_SERVER["REQUEST_URI"] )
+							),
+							'move-menu_item'
+						);
+						echo '" class="item-move-down"><abbr title="' . esc_attr__('Move down') . '">&#8595;</abbr></a>';
+						echo '</span>';
 						echo '</li>';
 
 						unset( $metaboxes[ $name ][ $metabox_id ] );

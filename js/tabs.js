@@ -1,5 +1,5 @@
 jQuery(function($) {
-	$( document ).on("click", ".tabify-tab", function( evt ) {
+	$( ".tabify-tab" ).on("click", function( evt ) {
 		evt.preventDefault();
 		$( ".tabify-tab" ).removeClass( 'nav-tab-active' );
 		$( this ).addClass( 'nav-tab-active' );

@@ -4,18 +4,21 @@ jQuery(function($) {
 		scroll : false
 	});
 
-	$( ".tabify_control ul" ).sortable({
-		//items : ".steps",
-		connectWith: ".tabify_control ul",
-		scroll : false,
-		disableSelection: true,
-		receive: function(event, ui) {
-			var item = $( ui.item );
-			var parts = $( 'input', ui.item ).attr('name').split( '][' );
-			parts[2] = item.closest( 'div' ).index();
-			$( 'input', ui.item ).attr( 'name', parts.join( '][' ) );
-		}
-	});
+	initialize_sortable_ul();
+	function initialize_sortable_ul() {
+		$( ".tabify_control ul" ).sortable({
+			//items : ".steps",
+			connectWith: ".tabify_control ul",
+			scroll : false,
+			disableSelection: true,
+			receive: function(event, ui) {
+				var item = $( ui.item );
+				var parts = $( 'input', ui.item ).attr('name').split( '][' );
+				parts[2] = item.closest( 'div' ).index();
+				$( 'input', ui.item ).attr( 'name', parts.join( '][' ) );
+			}
+		});
+	}
 
 	$( "#create_tab" ).on("click", function() {
 		var title = 'Choose title';
@@ -26,11 +29,12 @@ jQuery(function($) {
 
 		var html = '<div>';
 		html += '<h2><span>' + title + '</span><input type="text" name="tabify[' + posttype + '][tabs][' + counter + '][title]" value="' + title + '" style="display: none;" /></h2>';
-		html += '<ul margin: 0px; padding: 5px 0px 0px;"></ul></div>';
+		html += '<ul></ul></div>';
 
 		$( '.tabifybox-' + posttype + ' .tabify_control' ).append( html );
 
 		$( '.tabifybox-' + posttype + ' .tabify_control' ).sortable( "refresh" );
+		initialize_sortable_ul();
 	});
 
 

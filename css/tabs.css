@@ -4,6 +4,11 @@
 	display: inline-block;
 }
 
+.tabify_control ul {
+	margin: 0px;
+	padding: 6px 0px 0px;
+}
+
 .tabify_control .item-order {
 	float: right;
 	margin-right: 10px;

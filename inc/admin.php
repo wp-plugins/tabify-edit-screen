@@ -184,7 +184,7 @@ class Tabify_Edit_Screen_Admin {
 				echo '<h2><span class="hide-if-no-js">' . $tab['title'] . '</span><input type="text" name="tabify[' . $posttype . '][tabs][' . $tab_id . '][title]" value="' . $tab['title'] . '" class="hide-if-js" /></h2>';
 
 
-				echo '<ul style="margin: 0px; padding: 6px 0px 0px;">';
+				echo '<ul>';
 				if( isset( $tab['metaboxes'] ) ) {
 					foreach( $tab['metaboxes'] as $metabox_id_fallback => $metabox_id ) {
 						if( intval( $metabox_id_fallback ) == 0 && $metabox_id_fallback != 0 ) {

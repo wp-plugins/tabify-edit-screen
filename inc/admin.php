@@ -29,6 +29,14 @@ class Tabify_Edit_Screen_Admin {
 		wp_register_script( 'tabify-edit-screen-admin', plugins_url( '/js/admin.js', dirname( __FILE__ ) ), array( 'jquery', 'jquery-ui-sortable' ), '1.0' );
 		wp_enqueue_script( 'tabify-edit-screen-admin' );
 
+		wp_register_script( 'tabify-edit-screen-admin', plugins_url( '/js/admin.js', dirname( __FILE__ ) ), array( 'jquery', 'jquery-ui-sortable' ), '1.0' );
+		wp_enqueue_script( 'tabify-edit-screen-admin' );
+
+		if( ! wp_script_is( 'jquery-touch-punch', 'registered' ) ) {
+			wp_register_script( 'jquery-touch-punch', plugins_url( '/js/jquery.ui.touch-punch.js', dirname( __FILE__ ) ), array( 'jquery-ui-widget', 'jquery-ui-mouse' ), '0.2.2', 1 ); 
+		}
+		wp_enqueue_script( 'jquery-touch-punch' );
+		
 		echo '<div class="wrap">';
 
 		screen_icon();
@@ -191,14 +199,14 @@ class Tabify_Edit_Screen_Admin {
 
 						unset( $metaboxes[ $posttype ][ $metabox_id ] );
 					}
+				}
 
-					if( count( $options[ $posttype ]['tabs'] ) == ( $tab_id + 1 ) ) {
-						foreach(  $metaboxes[ $posttype ] as $metabox_id => $metabox_title ) {
-							$this->list_show_metabox( $metabox_id, $metabox_title, $tab_id, $posttype, $default_metaboxes );
-
-						}
+				if ( count( $options[ $posttype ]['tabs'] ) == ( $tab_id + 1 ) ) {
+					foreach(  $metaboxes[ $posttype ] as $metabox_id => $metabox_title ) {
+						$this->list_show_metabox( $metabox_id, $metabox_title, $tab_id, $posttype, $default_metaboxes );
 					}
 				}
+
 				echo '</ul>';
 				echo '</div>';
 

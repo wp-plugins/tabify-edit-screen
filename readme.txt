@@ -43,6 +43,8 @@ At this moment the title and submit box are always visible. You can change this 
 * When you save the changes go back to the selected tab
 * Setting page works when javascript isn't supported (need fix)
 * You can now delete a tab when all the metaboxes are removed and the title is empty. Will be improved in later version
+* New metaboxes will always be showed in the setting page
+* The setting page now can be changed from a touch device
 
 = 0.1 (2012-4-2) =
 * First version to show people the possibilities
@@ -53,5 +55,4 @@ At this moment the title and submit box are always visible. You can change this 
 * Know when a metabox is showed from the screen options
 * Let user be able to move meta boxes to a different tab
 * Improve deleting a tab from the setting screen
-* Make the setting page work when the user is on a touch screen
-* Let is work with types (some how the values are empty)
+* Let is work with the plugin types

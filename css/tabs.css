@@ -1,5 +1,9 @@
 .tabifybox-hide { display: none; }
 
+.tabify_control {
+	display: inline-block;
+}
+
 .tabify_control .item-order {
 	float: right;
 	margin-right: 10px;

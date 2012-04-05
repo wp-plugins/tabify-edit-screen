@@ -41,10 +41,11 @@ At this moment the title and submit box are always visible. You can change this 
 * Added security checks on the setting screen
 * Create new tab now also works on all post types
 * When you save the changes go back to the selected tab
-* Setting page works when javascript isn't supported (need fix)
+* Setting page works when javascript isn't supported (work in progress)
 * You can now delete a tab when all the metaboxes are removed and the title is empty. Will be improved in later version
 * New metaboxes will always be showed in the setting page
 * The setting page now can be changed from a touch device
+* Move metaboxes in a new created tab
 
 = 0.1 (2012-4-2) =
 * First version to show people the possibilities

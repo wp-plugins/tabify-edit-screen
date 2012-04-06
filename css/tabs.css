@@ -1,7 +1,17 @@
-.tabifybox-hide { display: none; }
+.js .tabifybox-hide { display: none; }
+
+.tabify_control {
+	display: inline-block;
+}
+
+.tabify_control ul {
+	margin: 0px;
+	padding: 6px 0px 0px;
+}
 
 .tabify_control .item-order {
 	float: right;
+	margin-top: 5px;
 	margin-right: 10px;
 }
 

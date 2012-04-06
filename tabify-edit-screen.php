@@ -26,6 +26,16 @@ class Tabify_Edit_Screen {
 		add_action( 'admin_print_scripts-post-new.php', array( &$this, 'show_tabs' ), 1000 );
 	}
 
+	/**
+	 * When a post is saved let it return to the current selected tab.
+	 *
+	 * @param string $location The location the user will be sent to
+	 * @param int $post_id The post id
+	 * @return string $location The new location the user will be sent to
+	 *
+	 * @since 0.2
+	 *
+	 */
 	function redirect_add_current_tab( $location, $post_id ) {
 		if( isset( $_REQUEST['tab'] ) ) {
 			$location =  add_query_arg( 'tab', $_REQUEST['tab'], $location );
@@ -33,6 +43,14 @@ class Tabify_Edit_Screen {
 		return $location;
 	}
 
+	/**
+	 * Show the tabs on the edit screens.
+	 * This will load the tab class, tab options and actions
+	 * It will also will add the required classes to all the metaboxes
+	 *
+	 * @since 0.1
+	 *
+	 */
 	function show_tabs() {
 		global $post_type;
 
@@ -72,6 +90,12 @@ class Tabify_Edit_Screen {
 		}
 	}
 
+	/**
+	 * Generate the javascript for the edit screen
+	 *
+	 * @since 0.1
+	 *
+	 */
 	function generate_javascript() {
 		global $post_type;
 
@@ -86,7 +110,6 @@ class Tabify_Edit_Screen {
 			//echo '$( ".wrap > h2" ).append(' . $tabs . ');';
 
 			echo '$("#post").before( \'' . $tabs . '\' );';
-			//echo '$("#post").prepend( \'' . $this->editscreen_tabs->get_tabs_current_tab_input() . '\' );';
 			echo '});';
 
 			do_action( 'tabify_custom_javascript' );
@@ -94,6 +117,12 @@ class Tabify_Edit_Screen {
 		}
 	}
 
+	/**
+	 * Show the inputfield for current tab inside the form of the edit screen
+	 *
+	 * @since 0.2
+	 *
+	 */
 	function add_form_inputfield() {
 		echo $this->editscreen_tabs->get_tabs_current_tab_input();
 	}

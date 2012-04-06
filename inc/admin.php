@@ -6,7 +6,7 @@ class Tabify_Edit_Screen_Admin {
 	private $options;
 
 	/**
-	 * Adds a option page
+	 * Adds a option page to manage all the tabs
 	 *
 	 * @since 0.1
 	 */
@@ -261,6 +261,11 @@ class Tabify_Edit_Screen_Admin {
 		echo '</p>';
 	}
 
+	/**
+	 * Show the metabox for the sortable list
+	 *
+	 * @since 0.1
+	 */
 	private function list_show_metabox( $metabox_id, $metabox_title, $tab_id, $posttype, $default_metaboxes ) {
 		if( in_array( $metabox_id, $default_metaboxes ) ) {
 			echo '<li class="tabifybox-hide">';

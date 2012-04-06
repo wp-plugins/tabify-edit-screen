@@ -4,7 +4,7 @@ Plugin Name: Tabify edit screen
 Plugin URI: http://wp-rockstars.com/plugin/tabify-edit-screen
 Description: Enables tabs in the edit screen and manage them from the back-end
 Author: Marko Heijnen
-Version: 0.2
+Version: 0.3-dev
 Author URI: http://markoheijnen.com
 */
 

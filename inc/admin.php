@@ -230,6 +230,9 @@ class Tabify_Edit_Screen_Admin {
 						$metabox_title = '';
 						if( isset( $metaboxes[ $posttype ][ $metabox_id ] ) ) {
 							$metabox_title = $metaboxes[ $posttype ][ $metabox_id ];
+
+							$metabox_title = apply_filters( 'tabify_metaboxes_title' , $metabox_title, $metabox_id );
+							$metabox_title = apply_filters( 'tabify_metaboxes_title_' . $metabox_id , $metabox_title );
 						}
 
 						$this->list_show_metabox( $metabox_id, $metabox_title, $tab_id, $posttype, $default_metaboxes );
@@ -243,6 +246,11 @@ class Tabify_Edit_Screen_Admin {
 						if( empty( $metabox_id ) ) {
 							continue;
 						}
+
+						apply_filters( 'tabify_default_metaboxes_' . $post_type , $defaults );
+
+						$metabox_title = apply_filters( 'tabify_metaboxes_title' , $metabox_title, $metabox_id );
+						$metabox_title = apply_filters( 'tabify_metaboxes_title_' . $metabox_id , $metabox_title );
 
 						$this->list_show_metabox( $metabox_id, $metabox_title, $tab_id, $posttype, $default_metaboxes );
 					}

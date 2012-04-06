@@ -41,7 +41,7 @@ At this moment the title and submit box are always visible. You can change this 
 * Added security checks on the setting screen
 * Create new tab now also works on all post types
 * When you save the changes go back to the selected tab
-* Setting page works when javascript isn't supported (work in progress)
+* Setting page works when javascript isn't supported
 * You can now delete a tab when all the metaboxes are removed and the title is empty. Will be improved in later version
 * New metaboxes will always be showed in the setting page
 * The setting page now can be changed from a touch device
@@ -56,4 +56,5 @@ At this moment the title and submit box are always visible. You can change this 
 * Know when a metabox is showed from the screen options
 * Let user be able to move meta boxes to a different tab
 * Improve deleting a tab from the setting screen
-* Let is work with the plugin types
+* Let it work with the plugin "types"
+* The sorting of metabox in the setting should be listen to in the edit screen

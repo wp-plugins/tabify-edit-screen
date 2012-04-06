@@ -1,9 +1,13 @@
 jQuery(function($) {
-	
+	// Remove nojs support
+	$( ".tabify_control .item-order" ).remove();
+	$( "#tabify_edit_screen_nojs" ).remove();
+
 	$( ".tabify_control" ).sortable({
 		scroll : false
 	});
 
+	// Initialize sortables
 	initialize_sortable_ul();
 	function initialize_sortable_ul() {
 		$( ".tabify_control ul" ).sortable({
@@ -37,8 +41,7 @@ jQuery(function($) {
 		initialize_sortable_ul();
 	});
 
-
-
+	// Make the h2 changeable by a click
 	$( document ).on("click", ".tabifybox h2", function(){
 		$( 'span', this ).hide();
 		$( 'input', this ).show();

@@ -219,7 +219,7 @@ class Tabify_Edit_Screen_Admin {
 				echo '<ul>';
 				if( isset( $tab['metaboxes'] ) ) {
 					foreach( $tab['metaboxes'] as $metabox_id_fallback => $metabox_id ) {
-						if( intval( $metabox_id_fallback ) == 0 && $metabox_id_fallback != 0 ) {
+						if( intval( $metabox_id_fallback ) == 0 && $metabox_id_fallback !== 0 ) {
 							$metabox_id = $metabox_id_fallback;
 						}
 

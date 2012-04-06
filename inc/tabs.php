@@ -29,13 +29,21 @@ class Tabify_Edit_Screen_Tabs {
 		return $this->active;
 	}
 
-	public function get_tabs_with_container() {
+	public function get_tabs_with_container( $show_current_tab_input = true ) {
 		$return  = '<h2 class="nav-tab-wrapper" style="padding-left: 20px;">';
-		$return .= '<input type="hidden" id="current_tab" name="tab" value="' . $this->active. '" />';
+
+		if( $show_current_tab_input == true ) {
+			$return .= $this->get_tabs_current_tab_input();
+		}
+
 		$return .= $this->get_tabs();
 		$return .=  '</h2>';
 
 		return $return;
+	}
+
+	public function get_tabs_current_tab_input() {
+		return '<input type="hidden" id="current_tab" name="tab" value="' . $this->active. '" />';
 	}
 	
 	public function get_tabs() {

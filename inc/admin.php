@@ -183,7 +183,7 @@ class Tabify_Edit_Screen_Admin {
 			if( !isset( $options[ $posttype ] ) ) {
 				$options[ $posttype ] = array (
 					'tabs' => array(
-						array( 'title' => 'Others', 'metaboxes' => array() )
+						array( 'title' => __( 'Others' ), 'metaboxes' => array() )
 					)
 				);
 			}
@@ -192,7 +192,7 @@ class Tabify_Edit_Screen_Admin {
 				echo '<div class="tabifybox tabifybox-' . $posttype . '">';
 			}
 			else {
-				echo '<div class="tabifybox tabifybox-hide tabifybox-' . $posttype . '">';
+				echo '<div class="tabifybox tabifybox-hide tabifybox-' . $posttype . '" style="display: none;">';
 			}
 
 			$checked = '';
@@ -235,6 +235,10 @@ class Tabify_Edit_Screen_Admin {
 
 				if ( count( $options[ $posttype ]['tabs'] ) == ( $tab_id + 1 ) ) {
 					foreach(  $metaboxes[ $posttype ] as $metabox_id => $metabox_title ) {
+						if( empty( $metabox_id ) ) {
+							continue;
+						}
+
 						$this->list_show_metabox( $metabox_id, $metabox_title, $tab_id, $posttype, $default_metaboxes );
 					}
 				}
@@ -258,13 +262,13 @@ class Tabify_Edit_Screen_Admin {
 	}
 
 	private function list_show_metabox( $metabox_id, $metabox_title, $tab_id, $posttype, $default_metaboxes ) {
-		$class = 'menu-item-handle';
-
 		if( in_array( $metabox_id, $default_metaboxes ) ) {
-			$class = 'tabifybox-hide';
+			echo '<li class="tabifybox-hide">';
+		}
+		else {
+			echo '<li class="menu-item-handle">' . $metabox_title;
 		}
 
-		echo '<li class="' . $class . '">' . $metabox_title;
 		echo '<input type="hidden" name="tabify[' . $posttype . '][tabs][' . $tab_id . '][metaboxes][]" value="' . $metabox_id . '" />';
 
 		echo '<span class="item-order hide-if-js">';

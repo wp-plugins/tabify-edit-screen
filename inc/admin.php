@@ -227,7 +227,12 @@ class Tabify_Edit_Screen_Admin {
 							continue;
 						}
 
-						$this->list_show_metabox( $metabox_id, $metaboxes[ $posttype ][ $metabox_id ], $tab_id, $posttype, $default_metaboxes );
+						$metabox_title = '';
+						if( isset( $metaboxes[ $posttype ][ $metabox_id ] ) ) {
+							$metabox_title = $metaboxes[ $posttype ][ $metabox_id ];
+						}
+
+						$this->list_show_metabox( $metabox_id, $metabox_title, $tab_id, $posttype, $default_metaboxes );
 
 						unset( $metaboxes[ $posttype ][ $metabox_id ] );
 					}
@@ -267,7 +272,7 @@ class Tabify_Edit_Screen_Admin {
 	 * @since 0.1
 	 */
 	private function list_show_metabox( $metabox_id, $metabox_title, $tab_id, $posttype, $default_metaboxes ) {
-		if( in_array( $metabox_id, $default_metaboxes ) ) {
+		if( in_array( $metabox_id, $default_metaboxes ) || empty( $metabox_title ) ) {
 			echo '<li class="tabifybox-hide">';
 		}
 		else {

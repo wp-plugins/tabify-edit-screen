@@ -4,7 +4,7 @@ Donate link: http://wp-rockstars.com/plugins/tabify-edit-screen/
 Tags: tabs, edit, admin, post, page
 Requires at least: 3.3
 Tested up to: 3.4
-Stable tag: 0.1
+Stable tag: 0.2
 
 Enable tabs in the edit screen and manage them from the back-end.
 
@@ -34,6 +34,7 @@ At this moment the title and submit box are always visible. You can change this 
 == Screenshots ==
 
 1. How it would look like after enabling this plugin
+1. The settings page where you can manage the tabs for each posttype
 
 == Changelog ==
 

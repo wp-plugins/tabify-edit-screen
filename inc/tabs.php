@@ -97,8 +97,6 @@ class Tabify_Edit_Screen_Tabs {
 				$title = $title['title'];
 			}
 
-			$title = esc_attr__( $title, 'tabify-edit-screen-tab' );
-
 			if( $this->active == $key ) {
 				$return .= '<a id="tab-' . $key . '" href="' . $this->base_url . '&tab=' . $key . '" class="tabify-tab nav-tab nav-tab-active">' . $title . '</a>';
 			}

@@ -29,8 +29,8 @@ class Tabify_Edit_Screen_Admin {
 		wp_register_script( 'tabify-edit-screen-admin', plugins_url( '/js/admin.js', dirname( __FILE__ ) ), array( 'jquery', 'jquery-ui-sortable' ), '1.0' );
 		wp_enqueue_script( 'tabify-edit-screen-admin' );
 
-		wp_register_script( 'tabify-edit-screen-admin', plugins_url( '/js/admin.js', dirname( __FILE__ ) ), array( 'jquery', 'jquery-ui-sortable' ), '1.0' );
-		wp_enqueue_script( 'tabify-edit-screen-admin' );
+		$data = array( 'remove' => __( 'Remove', 'tabify-edit-screen' ), 'choose_title' => __( 'Choose title', 'tabify-edit-screen' ) );
+		wp_localize_script( 'tabify-edit-screen-admin', 'tabify_l10', $data );
 
 		if( ! wp_script_is( 'jquery-touch-punch', 'registered' ) ) {
 			wp_register_script( 'jquery-touch-punch', plugins_url( '/js/jquery.ui.touch-punch.js', dirname( __FILE__ ) ), array( 'jquery-ui-widget', 'jquery-ui-mouse' ), '0.2.2', 1 ); 
@@ -211,10 +211,14 @@ class Tabify_Edit_Screen_Admin {
 				echo '<div>';
 
 				if( $tab['title'] == '' ) {
-					$tab['title'] = __( 'Choose title', 'tabify-edit-screen' );
+					$tab['title'] = __( 'Choose title' );
 				}
 				echo '<h2><span class="hide-if-no-js">' . $tab['title'] . '</span><input type="text" name="tabify[' . $posttype . '][tabs][' . $tab_id . '][title]" value="' . $tab['title'] . '" class="hide-if-js" /></h2>';
-				echo '<a href="#">Remove</a>';
+
+				echo '<a href="#" class="tabify-remove-tab hide-if-no-js"';
+				if( isset( $tab['metaboxes'] ) && count( $tab['metaboxes'] ) > 0 ) { echo ' style="display: none;"'; }
+				echo '>' . __( 'Remove', 'tabify-edit-screen' ) . '</a>';
+				echo '<div class="clear"></div>';
 
 				echo '<ul>';
 				if( isset( $tab['metaboxes'] ) ) {

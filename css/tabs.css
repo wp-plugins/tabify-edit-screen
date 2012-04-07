@@ -4,6 +4,16 @@
 	display: inline-block;
 }
 
+.tabify_control h2 {
+	float: left;
+}
+
+.tabify-remove-tab {
+	color: #BC0B0B;
+	float: right;
+	margin: 17px 5px 4px 0;
+}
+
 .tabify_control ul {
 	margin: 0px;
 	padding: 6px 0px 0px;

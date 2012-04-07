@@ -174,7 +174,7 @@ class Tabify_Edit_Screen_Admin {
 	 * @since 0.1
 	 */
 	private function get_metaboxes( $posttypes ) {
-		$metaboxes = $this->initialize_metaboxes( $posttypes );
+		$metaboxes = $this->_get_metaboxes( $posttypes );
 		$this->options = $options = get_option( 'tabify-edit-screen', array() );
 
 		foreach( $posttypes as $posttype => $label ) {
@@ -211,10 +211,10 @@ class Tabify_Edit_Screen_Admin {
 				echo '<div>';
 
 				if( $tab['title'] == '' ) {
-					$tab['title'] = __( 'Choose title' );
+					$tab['title'] = __( 'Choose title', 'tabify-edit-screen' );
 				}
 				echo '<h2><span class="hide-if-no-js">' . $tab['title'] . '</span><input type="text" name="tabify[' . $posttype . '][tabs][' . $tab_id . '][title]" value="' . $tab['title'] . '" class="hide-if-js" /></h2>';
-
+				echo '<a href="#">Remove</a>';
 
 				echo '<ul>';
 				if( isset( $tab['metaboxes'] ) ) {
@@ -246,8 +246,6 @@ class Tabify_Edit_Screen_Admin {
 						if( empty( $metabox_id ) ) {
 							continue;
 						}
-
-						apply_filters( 'tabify_default_metaboxes_' . $post_type , $defaults );
 
 						$metabox_title = apply_filters( 'tabify_metaboxes_title' , $metabox_title, $metabox_id );
 						$metabox_title = apply_filters( 'tabify_metaboxes_title_' . $metabox_id , $metabox_title );
@@ -310,7 +308,7 @@ class Tabify_Edit_Screen_Admin {
 	 *
 	 * @since 0.1
 	 */
-	private function initialize_metaboxes( $posttypes ) {
+	private function _get_metaboxes( $posttypes ) {
 		if( ! $this->metaboxes ) {
 			global $wp_meta_boxes;
 
@@ -324,6 +322,8 @@ class Tabify_Edit_Screen_Admin {
 				if ( post_type_supports( $posttype, 'editor' ) ) {
 					$this->metaboxes[ $posttype ][ 'postdivrich'] = __( 'Editor' );
 				}
+
+				do_action( 'tabify_add_meta_boxes', $posttype );
 
 				$this->load_default_metaboxes( $posttype );
 				do_action( 'add_meta_boxes', $posttype, null );

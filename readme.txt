@@ -38,6 +38,13 @@ At this moment the title and submit box are always visible. You can change this 
 
 == Changelog ==
 
+= 0.4 ( t.b.a. / planning ) =
+* Better UI admin
+* Know when a metabox is showed from the screen options
+* The sorting of metabox in the setting should be listen to in the edit screen
+* Start with translating the plugin
+* Improve deleting a tab from the setting screen
+
 = 0.3 (2012-4-7) =
 * Add support for the plugin "Types"
 * Removed the filter tabify_default_metaboxes_$posttype and changed it for the action tabify_add_meta_boxes
@@ -61,8 +68,4 @@ At this moment the title and submit box are always visible. You can change this 
 
 == TODO's ==
 
-* Better UI admin
-* Know when a metabox is showed from the screen options
 * Let user be able to move meta boxes to a different tab
-* Improve deleting a tab from the setting screen
-* The sorting of metabox in the setting should be listen to in the edit screen

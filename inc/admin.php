@@ -3,9 +3,10 @@
 class Tabify_Edit_Screen_Admin {
 	private $metaboxes = array();
 	private $tabs;
+	private $options;
 
 	/**
-	 * Adds a option page
+	 * Adds a option page to manage all the tabs
 	 *
 	 * @since 0.1
 	 */
@@ -22,12 +23,20 @@ class Tabify_Edit_Screen_Admin {
 		if ( ! current_user_can( 'manage_options' ) ) {
 			wp_die( __( 'You do not have sufficient permissions to manage options for this site.' ) );
 		}
-		
+
 		$this->update_settings();
 
 		wp_register_script( 'tabify-edit-screen-admin', plugins_url( '/js/admin.js', dirname( __FILE__ ) ), array( 'jquery', 'jquery-ui-sortable' ), '1.0' );
 		wp_enqueue_script( 'tabify-edit-screen-admin' );
 
+		$data = array( 'remove' => __( 'Remove', 'tabify-edit-screen' ), 'choose_title' => __( 'Choose title', 'tabify-edit-screen' ) );
+		wp_localize_script( 'tabify-edit-screen-admin', 'tabify_l10', $data );
+
+		if( ! wp_script_is( 'jquery-touch-punch', 'registered' ) ) {
+			wp_register_script( 'jquery-touch-punch', plugins_url( '/js/jquery.ui.touch-punch.js', dirname( __FILE__ ) ), array( 'jquery-ui-widget', 'jquery-ui-mouse' ), '0.2.2', 1 ); 
+		}
+		wp_enqueue_script( 'jquery-touch-punch' );
+		
 		echo '<div class="wrap">';
 
 		screen_icon();
@@ -35,6 +44,8 @@ class Tabify_Edit_Screen_Admin {
 
 		echo '<form method="post">';
 		wp_nonce_field( plugin_basename( __FILE__ ), 'tabify_edit_screen_nonce' );
+
+		echo '<input type="hidden" id="tabify_edit_screen_nojs" name="tabify_edit_screen_nojs" value="1" />';
 
 		$posttypes = $this->get_posttypes();
 		$this->get_tabs( $posttypes );
@@ -85,9 +96,39 @@ class Tabify_Edit_Screen_Admin {
 			for( $j = 0; $j < $amount_tabs; $j++ ) {
 				$posttypes[ $key ]['tabs'][ $j ]['title'] = esc_attr( wp_strip_all_tags( $posttypes[ $key ]['tabs'][ $j ]['title'] ) );
 
-				if( $posttypes[ $key ]['tabs'][ $j ]['title'] == '' && count( $posttypes[ $key ]['tabs'][ $j ]['metaboxes'] ) == 0 ) {
-					unset( $posttypes[ $key ]['tabs'][ $j ] );
+				if( !isset( $posttypes[ $key ]['tabs'][ $j ]['metaboxes'] ) || count( $posttypes[ $key ]['tabs'][ $j ]['metaboxes'] ) == 0 ) {
+					if( $posttypes[ $key ]['tabs'][ $j ]['title'] == '' ) {
+						unset( $posttypes[ $key ]['tabs'][ $j ] );
+					}
+					continue;
 				}
+
+				$amount_metaboxes = count( $posttypes[ $key ]['tabs'][ $j ]['metaboxes'] );
+				for( $k = 0; $k < $amount_metaboxes; $k++ ) {
+					// Should the metabox be moved. Only applies when browser doesn't support Javascript
+					if(
+						isset( $posttypes[ $key ]['tabs'][ $j ]['metaboxes_tab'][ $k ] ) &&
+						$posttypes[ $key ]['tabs'][ $j ]['metaboxes_tab'][ $k ] != $j &&
+						isset( $posttypes[ $key ]['tabs'][ intval( $posttypes[ $key ]['tabs'][ $j ]['metaboxes_tab'][ $k ] ) ] )
+					) {
+						$new_tab_key = intval( $posttypes[ $key ]['tabs'][ $j ]['metaboxes_tab'][ $k ] );
+
+						if( ! isset( $posttypes[ $key ]['tabs'][ $new_tab_key ]['metaboxes'] ) ) {
+							$posttypes[ $key ]['tabs'][ $new_tab_key ]['metaboxes'] = array();
+							$metaboxes_in_new_tab = 0;
+						}
+						else { 
+							$metaboxes_in_new_tab = count( $posttypes[ $key ]['tabs'][ $new_tab_key ]['metaboxes'] );
+						}
+
+						$posttypes[ $key ]['tabs'][ $new_tab_key ]['metaboxes'][ $k ] = esc_attr( wp_strip_all_tags( $posttypes[ $key ]['tabs'][ $j ]['metaboxes'][ $k ] ) );
+						unset( $posttypes[ $key ]['tabs'][ $j ]['metaboxes'][ $k ] );
+					}
+					else {
+						$posttypes[ $key ]['tabs'][ $j ]['metaboxes'][ $k ] = esc_attr( wp_strip_all_tags( $posttypes[ $key ]['tabs'][ $j ]['metaboxes'][ $k ] ) );
+					}
+				}
+				$posttypes[ $key ]['tabs'][ $j ]['metaboxes'] = array_values( $posttypes[ $key ]['tabs'][ $j ]['metaboxes'] );
 			}
 		}
 
@@ -133,122 +174,94 @@ class Tabify_Edit_Screen_Admin {
 	 * @since 0.1
 	 */
 	private function get_metaboxes( $posttypes ) {
-		$metaboxes = $this->initialize_metaboxes( $posttypes );
-		$options = get_option( 'tabify-edit-screen', array() );
+		$metaboxes = $this->_get_metaboxes( $posttypes );
+		$this->options = $options = get_option( 'tabify-edit-screen', array() );
 
-		$default_metaboxes = $this->tabs->get_default_metaboxes();
+		foreach( $posttypes as $posttype => $label ) {
+			$default_metaboxes = $this->tabs->get_default_metaboxes( $posttype );
 
-		$removed_args = array(
-			'action',
-			'menu-item',
-			'_wpnonce',
-		);
-
-		foreach( $posttypes as $name => $label ) {
-			if( !isset( $options[ $name ] ) ) {
-				$options[ $name ] = array (
+			if( !isset( $options[ $posttype ] ) ) {
+				$options[ $posttype ] = array (
 					'tabs' => array(
-						array( 'title' => 'Others', 'metaboxes' => $metaboxes[ $name ] )
+						array( 'title' => __( 'Others' ), 'metaboxes' => array() )
 					)
 				);
 			}
 
-			if( $name == $this->tabs->get_current_tab() ) {
-				echo '<div class="tabifybox tabifybox-' . $name . '">';
+			if( $posttype == $this->tabs->get_current_tab() ) {
+				echo '<div class="tabifybox tabifybox-' . $posttype . '">';
 			}
 			else {
-				echo '<div class="tabifybox tabifybox-hide tabifybox-' . $name . '">';
+				echo '<div class="tabifybox tabifybox-hide tabifybox-' . $posttype . '" style="display: none;">';
 			}
 
 			$checked = '';
-			if( isset( $options[ $name ]['show'] ) && $options[ $name ]['show'] == 1 ) {
+			if( isset( $options[ $posttype ]['show'] ) && $options[ $posttype ]['show'] == 1 ) {
 				$checked = ' checked="checked"';
 			}
 
 			echo '<div class="tabifybox-options">';
-			echo '<p><input type="checkbox" name="tabify[' . $name . '][show]" value="1" ' . $checked . '/> ' . __( 'Show tabs in this post type.', 'tabify-edit-screen' ) . '</p>';
+			echo '<p><input type="checkbox" name="tabify[' . $posttype . '][show]" value="1" ' . $checked . '/> ' . __( 'Show tabs in this post type.', 'tabify-edit-screen' ) . '</p>';
 			echo '</div>';
 
 			echo '<div class="tabify_control">';
 
-			$i = 0;
-			foreach( $options[ $name ]['tabs'] as $tab ) {
+			$tab_id = 0;
+			foreach( $options[ $posttype ]['tabs'] as $tab ) {
 				echo '<div>';
 
 				if( $tab['title'] == '' ) {
 					$tab['title'] = __( 'Choose title' );
 				}
-				echo '<h2><span class="hide-if-no-js">' . $tab['title'] . '</span><input type="text" name="tabify[' . $name . '][tabs][' . $i . '][title]" value="' . $tab['title'] . '" class="hide-if-js" /></h2>';
+				echo '<h2><span class="hide-if-no-js">' . $tab['title'] . '</span><input type="text" name="tabify[' . $posttype . '][tabs][' . $tab_id . '][title]" value="' . $tab['title'] . '" class="hide-if-js" /></h2>';
 
-				echo '<ul style="margin: 0px; padding: 6px 0px 0px;">';
+				echo '<a href="#" class="tabify-remove-tab hide-if-no-js"';
+				if( isset( $tab['metaboxes'] ) && count( $tab['metaboxes'] ) > 0 ) { echo ' style="display: none;"'; }
+				echo '>' . __( 'Remove', 'tabify-edit-screen' ) . '</a>';
+				echo '<div class="clear"></div>';
+
+				echo '<ul>';
 				if( isset( $tab['metaboxes'] ) ) {
 					foreach( $tab['metaboxes'] as $metabox_id_fallback => $metabox_id ) {
-						if( intval( $metabox_id_fallback ) == 0 && $metabox_id_fallback != 0 ) {
+						if( intval( $metabox_id_fallback ) == 0 && $metabox_id_fallback !== 0 ) {
 							$metabox_id = $metabox_id_fallback;
 						}
+
 						if( empty( $metabox_id ) ) {
 							continue;
 						}
 
-						$class = 'menu-item-handle';
+						$metabox_title = '';
+						if( isset( $metaboxes[ $posttype ][ $metabox_id ] ) ) {
+							$metabox_title = $metaboxes[ $posttype ][ $metabox_id ];
 
-						if( in_array( $metabox_id, $default_metaboxes ) ) {
-							$class = 'tabifybox-hide';
+							$metabox_title = apply_filters( 'tabify_metaboxes_title' , $metabox_title, $metabox_id );
+							$metabox_title = apply_filters( 'tabify_metaboxes_title_' . $metabox_id , $metabox_title );
 						}
 
-						echo '<li class="' . $class . '">' . $metaboxes[ $name ][ $metabox_id ];
-						echo '<input type="hidden" name="tabify[' . $name . '][tabs][' . $i . '][metaboxes][]" value="' . $metabox_id . '" />';
+						$this->list_show_metabox( $metabox_id, $metabox_title, $tab_id, $posttype, $default_metaboxes );
 
-						echo '<span class="item-order hide-if-js">';
-						echo '<a href="';
-						echo wp_nonce_url(
-							add_query_arg(
-								array(
-									'action' => 'tabify-item-move-up',
-									'menu-item' => $name . '-' . $i . '-' . $metabox_id,
-								),
-								remove_query_arg($removed_args, $_SERVER["REQUEST_URI"] )
-							),
-							'move-menu_item'
-						);
-						echo '" class="item-move-up"><abbr title="' . esc_attr__( 'Move up' ) . '">&#8593;</abbr></a>';
-						echo ' | ';
-						echo '<a href="';
-						echo wp_nonce_url(
-							add_query_arg(
-								array(
-									'action' => 'tabify-item-move-down',
-									'menu-item' => $name . '-' . $i . '-' . $metabox_id,
-								),
-								remove_query_arg( $removed_args, $_SERVER["REQUEST_URI"] )
-							),
-							'move-menu_item'
-						);
-						echo '" class="item-move-down"><abbr title="' . esc_attr__('Move down') . '">&#8595;</abbr></a>';
-						echo '</span>';
-						echo '</li>';
-
-						unset( $metaboxes[ $name ][ $metabox_id ] );
-					}
-
-					if( count( $options[ $name ]['tabs'] ) == ( $i + 1 ) ) {
-						foreach(  $metaboxes[ $name ] as $metabox_id => $metabox_title ) {
-							$class = 'menu-item-handle';
-	
-							if( in_array( $metabox_id, $default_metaboxes ) ) {
-								$class = 'tabifybox-hide';
-							}
-	
-							echo '<li class="' . $class . '">' . $metabox_title;
-							echo '<input type="hidden" name="tabify[' . $name . '][tabs][' . $i . '][metaboxes][]" value="' . $metabox_id . '" />';
-							echo '</li>';
-						}
+						unset( $metaboxes[ $posttype ][ $metabox_id ] );
 					}
 				}
+
+				if ( count( $options[ $posttype ]['tabs'] ) == ( $tab_id + 1 ) ) {
+					foreach(  $metaboxes[ $posttype ] as $metabox_id => $metabox_title ) {
+						if( empty( $metabox_id ) ) {
+							continue;
+						}
+
+						$metabox_title = apply_filters( 'tabify_metaboxes_title' , $metabox_title, $metabox_id );
+						$metabox_title = apply_filters( 'tabify_metaboxes_title_' . $metabox_id , $metabox_title );
+
+						$this->list_show_metabox( $metabox_id, $metabox_title, $tab_id, $posttype, $default_metaboxes );
+					}
+				}
+
 				echo '</ul>';
 				echo '</div>';
 
-				$i++;
+				$tab_id++;
 			}
 
 
@@ -264,11 +277,42 @@ class Tabify_Edit_Screen_Admin {
 	}
 
 	/**
+	 * Show the metabox for the sortable list
+	 *
+	 * @since 0.1
+	 */
+	private function list_show_metabox( $metabox_id, $metabox_title, $tab_id, $posttype, $default_metaboxes ) {
+		if( in_array( $metabox_id, $default_metaboxes ) || empty( $metabox_title ) ) {
+			echo '<li class="tabifybox-hide">';
+		}
+		else {
+			echo '<li class="menu-item-handle">' . $metabox_title;
+		}
+
+		echo '<input type="hidden" name="tabify[' . $posttype . '][tabs][' . $tab_id . '][metaboxes][]" value="' . $metabox_id . '" />';
+
+		echo '<span class="item-order hide-if-js">';
+		echo '<select name="tabify[' . $posttype . '][tabs][' . $tab_id . '][metaboxes_tab][]">';
+		$amount_tabs = count( $this->options[ $posttype ]['tabs'] );
+		for( $i = 0; $i < $amount_tabs; $i++ ) {
+			if( $i == $tab_id ) {
+				echo '<option value="' . $i . '" selected="selected">' . $this->options[ $posttype ]['tabs'][ $i ]['title'] . '</option>';
+			}
+			else {
+				echo '<option value="' . $i . '">' . $this->options[ $posttype ]['tabs'][ $i ]['title'] . '</option>';
+			}
+		}
+		echo '</select>';
+		echo '</span>';
+		echo '</li>';
+	}
+
+	/**
 	 * Gets all the metaboxes that are registered
 	 *
 	 * @since 0.1
 	 */
-	private function initialize_metaboxes( $posttypes ) {
+	private function _get_metaboxes( $posttypes ) {
 		if( ! $this->metaboxes ) {
 			global $wp_meta_boxes;
 
@@ -282,6 +326,8 @@ class Tabify_Edit_Screen_Admin {
 				if ( post_type_supports( $posttype, 'editor' ) ) {
 					$this->metaboxes[ $posttype ][ 'postdivrich'] = __( 'Editor' );
 				}
+
+				do_action( 'tabify_add_meta_boxes', $posttype );
 
 				$this->load_default_metaboxes( $posttype );
 				do_action( 'add_meta_boxes', $posttype, null );

@@ -73,19 +73,21 @@ class Tabify_Edit_Screen {
 					$class .= ' tabifybox-hide';
 				}
 
-				foreach( $tab['metaboxes'] as $metabox_id_fallback => $metabox_id ) {
-					if( intval( $metabox_id_fallback ) == 0 && $metabox_id_fallback !== 0 ) {
-						$metabox_id = $metabox_id_fallback;
-					}
-
-					if( ! in_array( $metabox_id, $default_metaboxes ) ) {
-						if( $metabox_id == 'titlediv' || $metabox_id == 'postdivrich' ) {
-							$func = create_function('', 'echo "jQuery(\"#' . $metabox_id . '\").addClass(\"' . $class . '\");";');
-							add_filter( 'tabify_custom_javascript' , $func );
+				if( isset( $tab['metaboxes'] ) ) {
+					foreach( $tab['metaboxes'] as $metabox_id_fallback => $metabox_id ) {
+						if( intval( $metabox_id_fallback ) == 0 && $metabox_id_fallback !== 0 ) {
+							$metabox_id = $metabox_id_fallback;
 						}
-						else {
-							$func = create_function('$args', 'array_push($args, "' . $class . '"); return $args;');
-							add_filter( 'postbox_classes_' . $post_type . '_' . $metabox_id, $func );
+
+						if( ! in_array( $metabox_id, $default_metaboxes ) ) {
+							if( $metabox_id == 'titlediv' || $metabox_id == 'postdivrich' ) {
+								$func = create_function('', 'echo "jQuery(\"#' . $metabox_id . '\").addClass(\"' . $class . '\");";');
+								add_filter( 'tabify_custom_javascript' , $func );
+							}
+							else {
+								$func = create_function('$args', 'array_push($args, "' . $class . '"); return $args;');
+								add_filter( 'postbox_classes_' . $post_type . '_' . $metabox_id, $func );
+							}
 						}
 					}
 				}

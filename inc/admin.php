@@ -208,7 +208,7 @@ class Tabify_Edit_Screen_Admin {
 
 			$tab_id = 0;
 			foreach( $options[ $posttype ]['tabs'] as $tab ) {
-				echo '<div>';
+				echo '<div class="menu-item-handle tabify_tab">';
 
 				if( $tab['title'] == '' ) {
 					$tab['title'] = __( 'Choose title' );

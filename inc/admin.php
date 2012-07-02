@@ -44,17 +44,29 @@ class Tabify_Edit_Screen_Admin {
 		screen_icon();
 		echo '<h2>' . esc_html( get_admin_page_title() ) . '</h2>';
 
-		echo '<form method="post">';
+		echo '<form id="tabify-form" method="post">';
 		wp_nonce_field( plugin_basename( __FILE__ ), 'tabify_edit_screen_nonce' );
 
 		echo '<input type="hidden" id="tabify_edit_screen_nojs" name="tabify_edit_screen_nojs" value="1" />';
 
 		$posttypes = $this->get_posttypes();
 		$this->get_tabs( $posttypes );
+
+		echo '<div id="tabify-settings"><div id="tabifyboxes">';
 		$this->get_metaboxes( $posttypes );
 
-		echo '</form>';
+		echo '</div>';
 
+		if( apply_filters( 'tabify_support', true ) ) {
+			include 'support.php';
+			$support = new Tabify_Support( 'tabify-edit-screen' );
+
+			echo '<div id="tabify-support">';
+			$support->support_forum();
+			echo '</div>';
+		}
+
+		echo '</form>';
 		echo '</div>';
 	}
 

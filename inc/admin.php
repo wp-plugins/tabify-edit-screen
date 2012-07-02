@@ -24,6 +24,8 @@ class Tabify_Edit_Screen_Admin {
 			wp_die( __( 'You do not have sufficient permissions to manage options for this site.' ) );
 		}
 
+		$this->load_plugin_support();
+
 		$this->update_settings();
 
 		wp_register_script( 'tabify-edit-screen-admin', plugins_url( '/js/admin.js', dirname( __FILE__ ) ), array( 'jquery', 'jquery-ui-sortable' ), '1.0' );
@@ -134,6 +136,19 @@ class Tabify_Edit_Screen_Admin {
 
 		return $posttypes;
 	}
+
+	/**
+	 * Load additional support for plugins that have unique code
+	 *
+	 * @since 0.4
+	 */
+	private function load_plugin_support() {
+		if( apply_filters( 'tabify_plugin_support', true ) ) {
+			include 'plugin-support.php';
+			new Tabify_Edit_Screen_Plugin_Support();
+		}
+	}
+
 
 	/**
 	 * Gets all the post types

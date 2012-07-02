@@ -152,7 +152,9 @@ class Tabify_Edit_Screen_Admin {
 
 		$posttypes = array();
 		foreach( $posttypes_objects as $posttype_object ) {
-			$posttypes[ $posttype_object->name ] = $posttype_object->label;
+			if( is_object( $posttype_object ) ) {
+				$posttypes[ $posttype_object->name ] = $posttype_object->label;
+			}
 		}
 
 		return $posttypes;

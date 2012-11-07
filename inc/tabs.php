@@ -2,9 +2,13 @@
 
 class Tabify_Edit_Screen_Tabs {
 	private $base_url = '';
+	private $get_arg = 'tab';
 
 	private $active = '';
-	private $items = array();
+
+	private $items  = array();
+	private $type;
+	private $javascript_support;
 
 	/**
 	 * construct method
@@ -13,18 +17,22 @@ class Tabify_Edit_Screen_Tabs {
 	 *
 	 * @since 0.1
 	 */
-	function __construct( $items ) {
+	function __construct( $items, $type = 'horizontal', $get_arg = 'tab', $javascript_support = true ) {
 		if( is_array( $items ) ) {
-			do_action( 'tabify_tabs', $this );
-			$this->items = apply_filters( 'tabify_tabs', $items, $this );
+			do_action( 'tabify_tabs', $this, $type );
 
-			if( isset( $_REQUEST['tab'] ) ) {
-				$this->active = esc_attr( $_REQUEST['tab'] );
+			$this->items              = apply_filters( 'tabify_tabs', $items, $this );
+			$this->type               = $type;
+			$this->get_arg            = $get_arg;
+			$this->javascript_support = $javascript_support;
+
+			if( isset( $_REQUEST[ $this->get_arg ] ) ) {
+				$this->active = esc_attr( $_REQUEST[ $this->get_arg ] );
 			}
 
-			$this->base_url = remove_query_arg( 'tab', $_SERVER["REQUEST_URI"] );
+			$this->base_url = remove_query_arg( $this->get_arg, $_SERVER["REQUEST_URI"] );
 
-			if( empty( $this->active ) || !isset( $items[ $this->active ] ) ) {
+			if( empty( $this->active ) || ! isset( $items[ $this->active ] ) ) {
 				$this->active = key( $items );
 			}
 
@@ -53,7 +61,18 @@ class Tabify_Edit_Screen_Tabs {
 	 * @since 0.1
 	 */
 	public function get_tabs_with_container( $show_current_tab_input = true ) {
-		$return  = '<h2 class="nav-tab-wrapper" style="padding-left: 20px;">';
+		$class = 'tabify-tabs tab-' .  $this->type;
+
+		if( ! $this->javascript_support ) {
+			$class .= ' js-disabled';
+		}
+
+		if( 'horizontal' == $this->type ) {
+			$class .= ' nav-tab-wrapper';
+		}
+
+
+		$return  = '<h2 class="' . $class . '">';
 
 		if( $show_current_tab_input == true ) {
 			$return .= $this->get_tabs_current_tab_input();
@@ -80,7 +99,7 @@ class Tabify_Edit_Screen_Tabs {
 	 * @since 0.2
 	 */
 	public function get_tabs_current_tab_input() {
-		return '<input type="hidden" id="current_tab" name="tab" value="' . $this->active. '" />';
+		return '<input type="hidden" class="current_tab" name="' . $this->get_arg . '" value="' . $this->active. '" />';
 	}
 
 	/**
@@ -99,26 +118,13 @@ class Tabify_Edit_Screen_Tabs {
 			}
 
 			if( $this->active == $key ) {
-				$return .= '<a id="tab-' . $key . '" href="' . $this->base_url . '&tab=' . $key . '" class="tabify-tab nav-tab nav-tab-active">' . $title . '</a>';
+				$return .= '<a id="tab-' . $key . '" href="' . $this->base_url . '&' . $this->get_arg . '=' . $key . '" class="tabify-tab nav-tab nav-tab-active">' . $title . '</a>';
 			}
 			else {
-				$return .= '<a id="tab-' . $key . '" href="' . $this->base_url . '&tab=' . $key . '" class="tabify-tab nav-tab">' . $title . '</a>';
+				$return .= '<a id="tab-' . $key . '" href="' . $this->base_url . '&' . $this->get_arg . '=' . $key . '" class="tabify-tab nav-tab">' . $title . '</a>';
 			}
 		}
 
 		return $return;
-	}
-
-	/**
-	 * Get all the metaboxes that should always be showed
-	 *
-	 * @return array All the metaboxes id's in an array
-	 *
-	 * @since 0.1
-	 */
-	public function get_default_metaboxes( $post_type = '' ) {
-		$defaults = array( 'titlediv', 'submitdiv' ); //, 'postdivrich'
-		$defaults = apply_filters( 'tabify_default_metaboxes', $defaults, $post_type );
-		return apply_filters( 'tabify_default_metaboxes_' . $post_type , $defaults );
 	}
 }

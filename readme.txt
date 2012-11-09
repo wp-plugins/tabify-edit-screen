@@ -4,7 +4,7 @@ Donate link: http://wp-rockstars.com/plugins/tabify-edit-screen/
 Tags: tabs, edit, admin, post, page, posts
 Requires at least: 3.3
 Tested up to: 3.5
-Stable tag: 0.4
+Stable tag: 0.4.1
 
 Enable tabs in the edit screen and manage them from the back-end.
 
@@ -41,6 +41,9 @@ At this moment the title and submit box are always visible. You can change this 
 * Improved deleting a tab from the setting screen (0.5)
 * Be able to support Types/Views with my plugin (0.5)
 * Same sorting from the settings screen as in the post edit screen (0.6)
+
+= 0.4.1 ( 2012-11-9 ) =
+* Fix javascript code so you are now able to create new tabs again
 
 = 0.4 ( 2012-11-9 ) =
 * Complete fresh new UI for the settings screen

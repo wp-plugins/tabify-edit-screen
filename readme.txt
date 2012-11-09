@@ -3,8 +3,8 @@ Contributors: markoheijnen
 Donate link: http://wp-rockstars.com/plugins/tabify-edit-screen/
 Tags: tabs, edit, admin, post, page, posts
 Requires at least: 3.3
-Tested up to: 3.4
-Stable tag: 0.3
+Tested up to: 3.5
+Stable tag: 0.4
 
 Enable tabs in the edit screen and manage them from the back-end.
 
@@ -14,8 +14,7 @@ When you've got lots of post meta-boxes, your post edit screen can become diffic
 
 The plugin is still in active development, and I'm always looking for ways to improve it. 
 
-Known issue: currently the plugin ignores the "show on screen" values from the Screen options. I'm currently working to fix this issue.
-
+There are still lots of things changing in the code base. There are some hooks you can use but they can change from implementation till 1.0. I will always try to maintain backwards-compatible but till 1.0 I can't be sure for that.
 
 == Installation ==
 
@@ -38,11 +37,25 @@ At this moment the title and submit box are always visible. You can change this 
 
 == Changelog ==
 
-= 0.4 ( 2012-7-7 ) =
-* Better UI admin
-* Know when a metabox is showed from the screen options
-* Start with translating the plugin
-* Improve deleting a tab from the setting screen
+= Current progress =
+* Improving the UI more for 0.4
+* Know when a metabox is showed from the screen options (0.5)
+* Improved deleting a tab from the setting screen (0.5)
+* Same sorting from the settings screen as in the post edit screen (0.6)
+
+= 0.4 ( 2012-11-9 ) =
+* Complete fresh new UI for the settings screen
+* Fix possible bug for not showing author metabox in the settings screen
+* Fix notice on edit screen when no items where inside a tab
+* Fix issue that not all post types are showing
+* Now able to hide a metabox as an user and that the plugin will listen to that. Thank Elles for nagging me about to fix that ;)
+* Ability to remove plugin support and isn't on by default anymore. Can be enabled with the filter "tabify_plugin_support"
+* Added plugin support for Members and WordPress SEO. (Thanks sc0ttkclark for his help )
+* Added Dutch translation
+
+* Ability to modify tabs through the filter tabify_tabs
+* Ability to add more tab support like post types with the filter 'tabify-edit-screen-settings-tabs'
+* Ability to add more options with the action 'tabify-settings-posttype' and filter 'tabify-settings-update'
 
 = 0.3 (2012-4-7) =
 * Add support for the plugin "Types"

@@ -63,26 +63,36 @@ class Tabify_Edit_Screen_Tabs {
 	public function get_tabs_with_container( $show_current_tab_input = true ) {
 		$class = 'tabify-tabs tab-' .  $this->type;
 
-		if( ! $this->javascript_support ) {
+		if( ! $this->javascript_support )
 			$class .= ' js-disabled';
-		}
 
-		if( 'horizontal' == $this->type ) {
-			$class .= ' nav-tab-wrapper';
-		}
+		$return  = '<div class="' . $class . '">';
 
 
-		$return  = '<h2 class="' . $class . '">';
+		if( 'horizontal' == $this->type )
+			$return .= '<h2 class="nav-tab-wrapper">';
+		else
+			$return .= '<h2>';
 
 		if( $show_current_tab_input == true ) {
 			$return .= $this->get_tabs_current_tab_input();
 		}
 
 		$return .= $this->get_tabs();
-		$return .=  '</h2>';
+
+		$return .= '</h2>';
+
+		$return .= apply_filters( 'tabify_tabs_under', '', $this->type );
+
+		$return .= '</div>';
 
 		//When tabs are requested also enqueue the javascript and css code
-		wp_register_script( 'tabify-edit-screen', plugins_url( '/js/tabs.js', dirname( __FILE__ ) ), array( 'jquery' ), '1.0' );
+		$required = array( 'jquery' );
+
+		if ( 'post' == get_current_screen()->base )
+			$required[] = 'postbox';
+
+		wp_register_script( 'tabify-edit-screen', plugins_url( '/js/tabs.js', dirname( __FILE__ ) ), $required, '1.0' );
 		wp_enqueue_script( 'tabify-edit-screen' );
 
 		wp_register_style( 'tabify-edit-screen', plugins_url( '/css/tabs.css', dirname( __FILE__ ) ), array( ), '1.0' );

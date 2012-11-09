@@ -25,11 +25,30 @@ jQuery(function($) {
 				function tabify_show_tab( id, holder ) {
 					if( id && id.length != 0 ) {
 						$( ".tabifybox" ).hide();
-						$( ".tabifybox-" + id ).show();
 						$( ".current_tab", holder ).val( id );
+
+						$( ".tabifybox-" + id ).each( function( index ) {
+							var checkbox = $( '#' + $(this).attr('id') + '-hide' );
+
+							if( checkbox.attr('type') != 'checkbox' || checkbox.is(':checked') )
+								$(this).show();
+						});
 					}
 				}
 			});
 		}
-	});	
+	});
+
+	postboxes.save_state = function( page ) {
+		var closed = $('.postbox').filter('.closed').map(function() { return this.id; }).get().join(','),
+			hidden = $('.hide-postbox-tog').not(':checked').map(function() { return this.value; }).get().join(',');
+
+		$.post(ajaxurl, {
+			action: 'closed-postboxes',
+			closed: closed,
+			hidden: hidden,
+			closedpostboxesnonce: jQuery('#closedpostboxesnonce').val(),
+			page: page
+		});
+	}
 })(jQuery);

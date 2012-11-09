@@ -4,25 +4,34 @@ Plugin Name: Tabify edit screen
 Plugin URI: http://wp-rockstars.com/plugin/tabify-edit-screen
 Description: Enables tabs in the edit screen and manage them from the back-end
 Author: Marko Heijnen
-Version: 0.4-dev
+Text Domain: tabify-edit-screen
+Version: 0.4.1
 Author URI: http://markoheijnen.com
 */
-
-include 'inc/admin.php';
-include 'inc/tabs.php';
 
 class Tabify_Edit_Screen {
 	private $admin;
 	private $editscreen_tabs;
 
 	function __construct() {
-		$admin = new Tabify_Edit_Screen_Admin();
+		if( is_admin() ) {
+			include 'inc/admin.php';
+			include 'inc/tabs.php';
 
-		add_action( 'admin_menu', array( &$admin, 'admin_menu' ) );
+			$admin = new Tabify_Edit_Screen_Admin();
 
-		add_filter( 'redirect_post_location', array( &$this, 'redirect_add_current_tab' ), 10, 2 );
+			add_action( 'admin_menu', array( &$admin, 'admin_menu' ) );
 
-		add_action( 'admin_head', array( &$this, 'show_tabs' ), 10 );
+			add_filter( 'redirect_post_location', array( &$this, 'redirect_add_current_tab' ), 10, 2 );
+
+			add_action( 'admin_head', array( &$this, 'show_tabs' ), 10 );
+
+			add_action( 'plugins_loaded', array( &$this, 'load_translation' ) );
+		}
+	}
+
+	function load_translation() {
+		load_plugin_textdomain( 'tabify-edit-screen', false, basename( dirname( __FILE__ ) ) . '/languages' );
 	}
 
 	/**
@@ -57,9 +66,12 @@ class Tabify_Edit_Screen {
 			$post_type = $screen->post_type;
 			$options   = get_option( 'tabify-edit-screen', array() );
 
+			if( isset( $options['posttypes'] ) )
+				$options = $options['posttypes'];
+
 			if( isset( $options[ $post_type ], $options[ $post_type ]['show'] ) && $options[ $post_type ]['show'] == 1 ) {
 				$this->editscreen_tabs = new Tabify_Edit_Screen_Tabs( $options[ $post_type ]['tabs'] );
-				$default_metaboxes = $this->editscreen_tabs->get_default_metaboxes( $post_type );
+				$default_metaboxes = Tabify_Edit_Screen_Settings_Posttypes::get_default_metaboxes( $post_type );
 
 				add_action( 'admin_print_footer_scripts', array( &$this, 'generate_javascript' ), 9 );
 				add_action( 'dbx_post_sidebar', array( &$this, 'add_form_inputfield' ) );
@@ -104,6 +116,9 @@ class Tabify_Edit_Screen {
 		global $post_type;
 
 		$options = get_option( 'tabify-edit-screen', array() );
+
+		if( isset( $options['posttypes'] ) )
+			$options = $options['posttypes'];
 
 		if( isset( $options[ $post_type ], $options[ $post_type ]['show'] ) && $options[ $post_type ]['show'] == 1 ) {
 			$tabs = $this->editscreen_tabs->get_tabs_with_container( false );

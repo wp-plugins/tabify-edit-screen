@@ -18,14 +18,14 @@ jQuery(function($) {
 			receive: function(event, ui) {
 				var item = $( ui.item );
 				var parts = $( 'input', ui.item ).attr('name').split( '][' );
-				parts[2] = item.closest( 'div' ).index();
+				parts[3] = item.closest( 'div' ).index();
 				$( 'input', ui.item ).attr( 'name', parts.join( '][' ) );
 
 				item.closest( 'div' ).find( '.tabify-remove-tab ' ).hide();
 
 				var sender_children = $( ui.sender ).children().length;
 				if( sender_children == 0 ) {
-					ui.sender.closest( 'div' ).find( '.tabify-remove-tab ' ).show();
+					ui.sender.closest( 'div' ).find( '.tabify-remove-tab' ).show();
 				}
 			}
 		});
@@ -33,13 +33,13 @@ jQuery(function($) {
 
 	$( "#create_tab" ).on("click", function() {
 		var title = tabify_l10.choose_title;
-		var posttype = $( '.nav-tab-active' ).attr( 'id' );
+		var posttype = $( '#tabify-submenu .nav-tab-active' ).attr( 'id' );
 		posttype = posttype.replace( 'tab-', "");
 
 		var counter = $( '.tabifybox-' + posttype + ' .tabify_control' ).children().length;
 
 		var html = '<div class="menu-item-handle tabify_tab">';
-		html += '<h2><span>' + title + '</span><input type="text" name="tabify[' + posttype + '][tabs][' + counter + '][title]" value="' + title + '" style="display: none;" /></h2>';
+		html += '<h2><span>' + title + '</span><input type="text" name="tabify[posttypes][' + posttype + '][tabs][' + counter + '][title]" value="' + title + '" style="display: none;" /></h2>';
 		html += '<a href="#" class="tabify-remove-tab">' + tabify_l10.remove + '</a><div class="clear"></div>';
 		html += '<ul></ul></div>';
 

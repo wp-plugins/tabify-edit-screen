@@ -13,7 +13,7 @@ class Tabify_Edit_Screen_Admin {
 	 * @since 0.1
 	 */
 	public function admin_menu() {
-		add_options_page( __( 'Tabify edit screen', 'tabify-edit-screen' ), __( 'Tabify edit screen', 'tabify-edit-screen' ), 'manage_options', 'tabify-edit-screen', array( &$this, 'edit_screen' ) );
+		add_options_page( __( 'Tabify edit screen', 'tabify-edit-screen' ), __( 'Tabify edit screen', 'tabify-edit-screen' ), 'manage_options', 'tabify-edit-screen', array( $this, 'edit_screen' ) );
 	}
 
 	/**
@@ -28,12 +28,15 @@ class Tabify_Edit_Screen_Admin {
 
 		$this->load_plugin_support();
 
-		$this->update_settings();
-
 		wp_register_script( 'tabify-edit-screen-admin', plugins_url( '/js/admin.js', dirname( __FILE__ ) ), array( 'jquery', 'jquery-ui-sortable' ), '1.0' );
 		wp_enqueue_script( 'tabify-edit-screen-admin' );
 
-		$data = array( 'remove' => __( 'Remove', 'tabify-edit-screen' ), 'choose_title' => __( 'Choose title', 'tabify-edit-screen' ) );
+		$data = array(
+			'remove' => __( 'Remove', 'tabify-edit-screen' ),
+			'cancel' => __( 'Cancel', 'tabify-edit-screen' ),
+			'choose_title' => __( 'Choose title', 'tabify-edit-screen' ),
+			'move_meta_boxes' => __( 'Move meta boxes to', 'tabify-edit-screen' )
+		);
 		wp_localize_script( 'tabify-edit-screen-admin', 'tabify_l10', $data );
 
 		if( ! wp_script_is( 'jquery-touch-punch', 'registered' ) ) {
@@ -66,6 +69,8 @@ class Tabify_Edit_Screen_Admin {
 			$class_name = $tabs[ $this->tabs->get_current_tab() ]['class'];
 			$settings_screen = new $class_name();
 
+			$this->update_settings();
+
 			echo '<div id="tabify-settings">';
 				echo '<div id="tabifyboxes">';
 				echo $settings_screen->get_section();
@@ -90,6 +95,7 @@ class Tabify_Edit_Screen_Admin {
 	private function update_settings() {
 		if( $_SERVER['REQUEST_METHOD'] == 'POST' && isset( $_POST['tabify'] ) && check_admin_referer( plugin_basename( __FILE__ ), 'tabify_edit_screen_nonce' ) ) {
 			$options = $_POST['tabify'];
+
 			$options = apply_filters( 'tabify_settings_update', $options );
 
 			update_option( 'tabify-edit-screen', $options );

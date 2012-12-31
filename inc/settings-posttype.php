@@ -11,7 +11,7 @@ class Tabify_Edit_Screen_Settings_Posttypes extends Tabify_Edit_Screen_Settings_
 	function __construct() {
 		parent::__construct('posttypes');
 
-		add_filter( 'tabify-settings-update', array( $this, 'save_settings' ) );
+		add_filter( 'tabify_settings_update', array( $this, 'save_settings' ) );
 	}
 
 	/**
@@ -80,6 +80,11 @@ class Tabify_Edit_Screen_Settings_Posttypes extends Tabify_Edit_Screen_Settings_
 			echo '<div class="tabify_control">';
 
 			$tab_id = 0;
+			$remove = false;
+
+			if( 1 < count( $options[ $posttype ]['tabs'] ) )
+				$remove = true;
+
 			foreach( $options[ $posttype ]['tabs'] as $tab ) {
 				echo '<div class="menu-item-handle tabify_tab">';
 
@@ -89,8 +94,9 @@ class Tabify_Edit_Screen_Settings_Posttypes extends Tabify_Edit_Screen_Settings_
 				echo '<h2><span class="hide-if-no-js">' . $tab['title'] . '</span><input type="text" name="tabify[posttypes][' . $posttype . '][tabs][' . $tab_id . '][title]" value="' . $tab['title'] . '" class="hide-if-js" /></h2>';
 
 				echo '<a href="#" class="tabify-remove-tab hide-if-no-js"';
-				if( isset( $tab['metaboxes'] ) && count( $tab['metaboxes'] ) > 0 ) { echo ' style="display: none;"'; }
+				if( ! $remove ) { echo ' style="display: none;"'; }
 				echo '>' . __( 'Remove' ) . '</a>';
+
 				echo '<div class="clear"></div>';
 
 				echo '<ul>';
@@ -221,7 +227,8 @@ class Tabify_Edit_Screen_Settings_Posttypes extends Tabify_Edit_Screen_Settings_
 
 			$amount_tabs = count( $posttypes[ $key ]['tabs'] );
 			for( $j = 0; $j < $amount_tabs; $j++ ) {
-				$posttypes[ $key ]['tabs'][ $j ]['title'] = esc_attr( wp_strip_all_tags( $posttypes[ $key ]['tabs'][ $j ]['title'] ) );
+				$posttypes[ $key ]['tabs'][ $j ]['title'] = stripslashes( $posttypes[ $key ]['tabs'][ $j ]['title'] );
+				$posttypes[ $key ]['tabs'][ $j ]['title'] = esc_attr( wp_strip_all_tags(  $posttypes[ $key ]['tabs'][ $j ]['title'] ) );
 
 				if( !isset( $posttypes[ $key ]['tabs'][ $j ]['metaboxes'] ) || count( $posttypes[ $key ]['tabs'][ $j ]['metaboxes'] ) == 0 ) {
 					if( $posttypes[ $key ]['tabs'][ $j ]['title'] == '' ) {

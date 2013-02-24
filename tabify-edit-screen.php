@@ -1,37 +1,38 @@
 <?php
 /*
 Plugin Name: Tabify edit screen
-Plugin URI: http://wp-rockstars.com/plugin/tabify-edit-screen
+Plugin URI: http://rocksta.rs/plugin/tabify-edit-screen
 Description: Enables tabs in the edit screen and manage them from the back-end
 Author: Marko Heijnen
 Text Domain: tabify-edit-screen
-Version: 0.5.3
+Version: 0.6
 Author URI: http://markoheijnen.com
 */
 
 class Tabify_Edit_Screen {
-	private $admin;
+	public  $version = '0.6';
+	public  $admin;
 	private $editscreen_tabs;
 	private $tab_location = 'default';
 
 	function __construct() {
 		if( is_admin() ) {
-			include 'inc/admin.php';
-			include 'inc/tabs.php';
-
-			$admin = new Tabify_Edit_Screen_Admin();
-
-			add_action( 'admin_menu', array( $admin, 'admin_menu' ) );
-
-			add_filter( 'redirect_post_location', array( $this, 'redirect_add_current_tab' ), 10, 2 );
-
-			add_action( 'admin_head', array( $this, 'show_tabs' ), 10 );
-
 			add_action( 'plugins_loaded', array( $this, 'load_translation' ) );
 		}
 	}
 
 	function load_translation() {
+		include 'inc/admin.php';
+		include 'inc/tabs.php';
+
+		$this->admin = new Tabify_Edit_Screen_Admin();
+
+		add_action( 'admin_menu', array( $this->admin, 'admin_menu' ) );
+
+		add_filter( 'redirect_post_location', array( $this, 'redirect_add_current_tab' ), 10, 2 );
+
+		add_action( 'admin_head', array( $this, 'show_tabs' ), 10 );
+
 		load_plugin_textdomain( 'tabify-edit-screen', false, basename( dirname( __FILE__ ) ) . '/languages' );
 	}
 
@@ -47,7 +48,7 @@ class Tabify_Edit_Screen {
 	 */
 	function redirect_add_current_tab( $location, $post_id ) {
 		if( isset( $_REQUEST['tab'] ) ) {
-			$location =  add_query_arg( 'tab', $_REQUEST['tab'], $location );
+			$location = add_query_arg( 'tab', esc_attr( $_REQUEST['tab'] ), $location );
 		}
 		return $location;
 	}
@@ -61,6 +62,8 @@ class Tabify_Edit_Screen {
 	 *
 	 */
 	function show_tabs() {
+		global $wp_meta_boxes;
+
 		$screen = get_current_screen();
 
 		if( 'post' == $screen->base ) {
@@ -72,17 +75,22 @@ class Tabify_Edit_Screen {
 			if( isset( $options['posttypes'] ) )
 				$options = $options['posttypes'];
 
+			// This posttype has tabs
 			if( isset( $options[ $post_type ], $options[ $post_type ]['show'] ) && $options[ $post_type ]['show'] == 1 ) {
 				add_filter( 'admin_body_class', array( $this, 'add_admin_body_class' ) );
-				add_action( 'dbx_post_sidebar', array( $this, 'add_form_inputfield' ) );
 				add_action( 'admin_print_footer_scripts', array( $this, 'generate_javascript' ), 9 );
 
-
 				$this->editscreen_tabs = new Tabify_Edit_Screen_Tabs( $options[ $post_type ]['tabs'] );
-				$default_metaboxes     = Tabify_Edit_Screen_Settings_Posttypes::get_default_metaboxes( $post_type );
+				$default_metaboxes     = Tabify_Edit_Screen_Settings_Posttypes::get_default_items( $post_type );
+				$all_metaboxes         = array();
+
+				foreach( $wp_meta_boxes[ $post_type ] as $priorities )
+					foreach( $priorities as $priority => $_metaboxes )
+						foreach( $_metaboxes as $metabox )
+							if( ! in_array( $metabox['id'], $default_metaboxes ) )
+								$all_metaboxes[ $metabox['id'] ] = $metabox['title'];
 
 				$this->load_tabs();
-
 
 				foreach( $options[ $post_type ]['tabs'] as $tab_index => $tab ) {
 					$class = 'tabifybox tabifybox-' . $tab_index;
@@ -90,8 +98,13 @@ class Tabify_Edit_Screen {
 					if( $this->editscreen_tabs->get_current_tab() != $tab_index )
 						$class .= ' tabifybox-hide';
 
-					if( isset( $tab['metaboxes'] ) ) {
-						foreach( $tab['metaboxes'] as $metabox_id_fallback => $metabox_id ) {
+					// Backwards compatibily from 0.5 to 0.6
+					if( ! isset( $tab['items'] ) && isset( $tab['metaboxes'] ) )
+						$tab['items'] = $tab['metaboxes'];
+
+
+					if( isset( $tab['items'] ) ) {
+						foreach( $tab['items'] as $metabox_id_fallback => $metabox_id ) {
 							if( intval( $metabox_id_fallback ) == 0 && $metabox_id_fallback !== 0 )
 								$metabox_id = $metabox_id_fallback;
 
@@ -101,11 +114,33 @@ class Tabify_Edit_Screen {
 									add_action( 'tabify_custom_javascript' , $func );
 								}
 								else {
-									$func = create_function('$args', 'array_push($args, "' . $class . '"); return $args;');
+									$func = create_function( '$args', 'array_push( $args, "' . $class . '" ); return $args;' );
 									add_action( 'postbox_classes_' . $post_type . '_' . $metabox_id, $func );
+
+									if( isset( $all_metaboxes[ $metabox_id ] ) )
+										unset( $all_metaboxes[ $metabox_id ] );
 								}
 							}
 						}
+					}
+				}
+
+				// Metaboxes that aren't attachted
+				if( apply_filters( 'tabify_unattached_metaboxes_show', true, $post_type ) ) {
+					foreach( $all_metaboxes as $metabox_id => $metabox_title ) {
+						$last_index                 = $tab_index;
+						$unattached_metaboxes_index = apply_filters( 'tabify_unattached_metaboxes_index', $last_index, $post_type );
+
+						if( $unattached_metaboxes_index < 0 || $unattached_metaboxes_index > $last_index )
+							$unattached_metaboxes_index = $last_index;
+
+						$class = 'tabifybox tabifybox-' . $unattached_metaboxes_index;
+
+						if( $this->editscreen_tabs->get_current_tab() != $unattached_metaboxes_index )
+							$class .= ' tabifybox-hide';
+
+						$func = create_function( '$args', 'array_push( $args, "' . $class . '" ); return $args;' );
+						add_action( 'postbox_classes_' . $post_type . '_' . $metabox_id, $func );
 					}
 				}
 			}
@@ -113,7 +148,8 @@ class Tabify_Edit_Screen {
 	}
 
 	function add_admin_body_class( $body ) {
-		$body .= ' tabify_tab' . $this->tab_location;
+		if( $this->tab_location )
+			$body .= ' tabify_tab' . $this->tab_location;
 
 		return $body;
 	}
@@ -128,8 +164,8 @@ class Tabify_Edit_Screen {
 		if( 'after_title' == $this->tab_location )
 			add_action( 'edit_form_after_title', array( $this, 'output_tabs' ), 9 );
 		else { //default
-			$tabs = $this->editscreen_tabs->get_tabs_with_container( false );
-			$func = create_function('', 'echo "$(\'#post\').before(\'' . addslashes( $tabs ) . '\');";');
+			$tabs = $this->editscreen_tabs->get_tabs_with_container();
+			$func = create_function('', 'echo "$(\'#post\').prepend(\'' . addslashes( $tabs ) . '\');";');
 			add_action( 'tabify_custom_javascript' , $func );
 		}
 	}
@@ -151,25 +187,13 @@ class Tabify_Edit_Screen {
 	 *
 	 */
 	function generate_javascript() {
-		$tabs = $this->editscreen_tabs->get_tabs_with_container( false );
-
 		echo '<script type="text/javascript">';
 		echo 'jQuery(function($) {';
 		do_action( 'tabify_custom_javascript' );
 		echo '});';
 		echo '</script>';
 	}
-
-	/**
-	 * Show the inputfield for current tab inside the form of the edit screen
-	 *
-	 * @since 0.2
-	 *
-	 */
-	function add_form_inputfield() {
-		echo $this->editscreen_tabs->get_tabs_current_tab_input();
-	}
 }
 
 
-new Tabify_Edit_Screen();
+$tabify_edit_screen = new Tabify_Edit_Screen();

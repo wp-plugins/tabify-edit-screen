@@ -1,23 +1,42 @@
-.js .tabifybox-hide { display: none; }
+.tab-vertical {
+
+}
+.tab-vertical a {
+	background: #eee;
+	border-color: #DFDFDF;
+	border-width: 1px;
+	display: block;
+	margin: 0 0 10px 0;
+	font-size: 16px;
+	line-height: 20px;
+
+	-webkit-border-radius: 3px;
+	border-radius: 3px;
+}
+
+.tab-vertical .nav-tab:hover,
+.tab-vertical .nav-tab-active {
+	border-color: #ccc;
+}
+
+#poststuff .tabifybox-hide, .tabifybox-hide { display: none; }
+
+
+
 
 #tabify-settings {
-	margin-right: 300px;
+	margin: 0 5px 0 300px;
 }
 
 #tabifyboxes {
-	float: left;
+	float: right;
 	width: 100%;
 }
 
-#tabify-support {
-	float: right;
-	margin-right: -300px;
+#tabify-submenu {
+	float: left;
+	margin-left: -300px;
 	width: 280px;
-}
-
-.tabify_control .menu-item-handle {
-	overflow: visible;
-	width: auto;
 }
 
 
@@ -33,11 +52,29 @@
 	padding-bottom: 0px;
 }
 
+#tabifyboxes #create_tab {
+	margin-right: 10px;
+}
+
 .tabify-remove-tab {
 	color: #BC0B0B;
 	float: right;
 	line-height: normal;
 	margin: 17px 5px 0px 0;
+}
+
+.tabify-remove-accept {
+	clear: both;
+	display:none;
+}
+
+.tabify_control .tabify_tab {
+	background: #f9f9f9;
+}
+
+.tabify_control .menu-item-handle {
+	overflow: visible;
+	width: auto;
 }
 
 .tabify_control ul {
@@ -47,13 +84,14 @@
 
 .tabify_control .item-order {
 	float: right;
-	margin-top: 5px;
+	margin-top: 0px;
 	margin-right: 10px;
 }
 
 .tabify_control .item-order a {
 	text-decoration: none;
 }
+
 
 /*.postbox-container .meta-box-sortables.empty-container,*/
 #side-sortables.empty-container {

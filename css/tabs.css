@@ -19,9 +19,10 @@
 	border-color: #ccc;
 }
 
-#poststuff .tabifybox-hide, .tabifybox-hide { display: none; }
-
-
+.js #poststuff .tabifybox-hide,
+.js .tabifybox-hide {
+	display: none;
+}
 
 
 #tabify-settings {
@@ -92,9 +93,24 @@
 	text-decoration: none;
 }
 
+#second-submit {
+	float: right;
+	margin-top: 14px;
+}
+
 
 /*.postbox-container .meta-box-sortables.empty-container,*/
 #side-sortables.empty-container {
 	border: 0px;
 	height: auto;
+}
+
+
+
+.admin-color-mp6 .tab-vertical a {
+	background: #ddd;
+}
+
+.admin-color-mp6 .tab-vertical .nav-tab-active {
+	background: #fff;
 }

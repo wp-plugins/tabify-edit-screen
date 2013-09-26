@@ -5,12 +5,12 @@ Plugin URI: http://rocksta.rs/plugin/tabify-edit-screen
 Description: Enables tabs in the edit screen and manage them from the back-end
 Author: Marko Heijnen
 Text Domain: tabify-edit-screen
-Version: 0.7
+Version: 0.7.1
 Author URI: http://markoheijnen.com
 */
 
 class Tabify_Edit_Screen {
-	public  $version = '0.7';
+	public  $version = '0.7.1';
 	public  $admin;
 	private $editscreen_tabs;
 	private $tab_location = 'default';
@@ -31,7 +31,7 @@ class Tabify_Edit_Screen {
 
 		add_filter( 'redirect_post_location', array( $this, 'redirect_add_current_tab' ), 10, 2 );
 
-		add_action( 'admin_head', array( $this, 'show_tabs' ), 10 );
+		add_action( 'admin_head', array( $this, 'show_tabs' ), 100 );
 
 		load_plugin_textdomain( 'tabify-edit-screen', false, basename( dirname( __FILE__ ) ) . '/languages' );
 	}
@@ -204,7 +204,7 @@ class Tabify_Edit_Screen {
 
 		if ( ! in_array( $post->post_status, array( 'publish', 'future', 'private' ) ) || 0 == $post->ID ) {
 			if ( $can_publish ) {
-				if ( ! empty($post->post_date_gmt) && time() < strtotime( $post->post_date_gmt . ' +0000' ) ) {
+				if ( ! empty( $post->post_date_gmt ) && time() < strtotime( $post->post_date_gmt . ' +0000' ) ) {
 					$text = __( 'Schedule' );
 				}
 				else {

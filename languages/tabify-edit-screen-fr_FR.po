@@ -1,0 +1,124 @@
+# Translation of Tabify edit screen in French (France)
+# This file is distributed under the same license as the Tabify edit screen package.
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2013-02-24 18:58:31+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: GlotPress/0.1\n"
+"Project-Id-Version: Tabify edit screen\n"
+
+#: inc/admin.php:16
+msgid "Tabify edit screen"
+msgstr "Tabify Edit Screen"
+
+#: inc/admin.php:26
+msgid "You do not have sufficient permissions to manage options for this site."
+msgstr "Vous n'avez pas les permissions nécessaires pour gérer les options de ce site."
+
+#: inc/admin.php:35 inc/settings-posttype.php:98
+msgid "Remove"
+msgstr "Supprimer"
+
+#: inc/admin.php:36
+msgid "Cancel"
+msgstr "Annuler"
+
+#: inc/admin.php:37 inc/settings-posttype.php:92
+msgid "Choose title"
+msgstr "Choisir un titre"
+
+#: inc/admin.php:38
+msgid "Move meta boxes to"
+msgstr "Déplacer les metaboxes vers"
+
+#: inc/admin.php:58
+msgid "Post types"
+msgstr "Types de contenu"
+
+#: inc/settings-posttype.php:58
+msgid "Others"
+msgstr "Autres"
+
+#: inc/settings-posttype.php:76
+msgid "Show tabs in this post type."
+msgstr "Afficher les onglets pour ce type de contenu."
+
+#: inc/settings-posttype.php:153
+msgid "Create a new tab"
+msgstr "Créer un nouvel onglet"
+
+#: inc/settings-posttype.php:173
+msgid "Title"
+msgstr "Titre"
+
+#: inc/settings-posttype.php:177
+msgid "Editor"
+msgstr "Éditeur"
+
+#: inc/settings-posttype.php:279
+msgid "Publish"
+msgstr "Publier"
+
+#: inc/settings-posttype.php:282
+msgctxt "post format"
+msgid "Format"
+msgstr "Format"
+
+#: inc/settings-posttype.php:299
+msgid "Page Attributes"
+msgstr "Attributs de page"
+
+#: inc/settings-posttype.php:299
+msgid "Attributes"
+msgstr "Attributs"
+
+#: inc/settings-posttype.php:302
+msgid "Featured Image"
+msgstr "Image à la une"
+
+#: inc/settings-posttype.php:305
+msgid "Excerpt"
+msgstr "Extrait"
+
+#: inc/settings-posttype.php:308
+msgid "Send Trackbacks"
+msgstr "Envoi de rétroliens"
+
+#: inc/settings-posttype.php:311
+msgid "Custom Fields"
+msgstr "Champs personnalisés"
+
+#: inc/settings-posttype.php:315
+msgid "Discussion"
+msgstr "Discussion"
+
+#: inc/settings-posttype.php:318
+msgid "Comments"
+msgstr "Commentaires"
+
+#: inc/settings-posttype.php:320
+msgid "Slug"
+msgstr "Alias"
+
+#: inc/settings-posttype.php:323
+msgid "Author"
+msgstr "Auteur"
+
+#: inc/settings-posttype.php:326
+msgid "Revisions"
+msgstr "Révisions"
+
+msgid "http://wp-rockstars.com/plugin/tabify-edit-screen"
+msgstr "http://wp-rockstars.com/plugin/tabify-edit-screen"
+
+msgid "Enables tabs in the edit screen and manage them from the back-end"
+msgstr "Ajoutez des onglets sur l'écran d'édition et gérez-les depuis l'interface d'administration de WordPress."
+
+msgid "Marko Heijnen"
+msgstr "Marko Heijnen"
+
+msgid "http://markoheijnen.com"
+msgstr "http://markoheijnen.com"

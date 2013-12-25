@@ -10,7 +10,7 @@ class Tabify_Edit_Screen_Admin {
 	/**
 	 * Adds a option page to manage all the tabs
 	 *
-	 * @since 0.1
+	 * @since 0.1.0
 	 */
 	public function admin_menu() {
 		add_options_page( __( 'Tabify edit screen', 'tabify-edit-screen' ), __( 'Tabify edit screen', 'tabify-edit-screen' ), 'manage_options', 'tabify-edit-screen', array( $this, 'edit_screen' ) );
@@ -19,7 +19,7 @@ class Tabify_Edit_Screen_Admin {
 	/**
 	 * Option page that handles the form request
 	 *
-	 * @since 0.1
+	 * @since 0.1.0
 	 */
 	public function edit_screen() {
 		if ( ! current_user_can( 'manage_options' ) ) {
@@ -39,7 +39,7 @@ class Tabify_Edit_Screen_Admin {
 		);
 		wp_localize_script( 'tabify-edit-screen-admin', 'tabify_l10', $data );
 
-		if( ! wp_script_is( 'jquery-touch-punch', 'registered' ) ) {
+		if ( ! wp_script_is( 'jquery-touch-punch', 'registered' ) ) {
 			wp_register_script( 'jquery-touch-punch', plugins_url( '/js/jquery.ui.touch-punch.js', dirname( __FILE__ ) ), array( 'jquery-ui-widget', 'jquery-ui-mouse' ), '0.2.2', 1 ); 
 		}
 		wp_enqueue_script( 'jquery-touch-punch' );
@@ -61,11 +61,11 @@ class Tabify_Edit_Screen_Admin {
 
 		$this->tabs = new Tabify_Edit_Screen_Tabs( $tabs, 'horizontal', 'tab', false );
 
-		if( count( $tabs ) > 1 ) {
+		if ( count( $tabs ) > 1 ) {
 			echo $this->tabs->get_tabs_with_container();
 		}
 
-		if( isset( $tabs[ $this->tabs->get_current_tab() ] ) ) {
+		if ( isset( $tabs[ $this->tabs->get_current_tab() ] ) ) {
 			$class_name = $tabs[ $this->tabs->get_current_tab() ]['class'];
 			$settings_screen = new $class_name();
 
@@ -89,11 +89,11 @@ class Tabify_Edit_Screen_Admin {
 	/**
 	 * Updates settings
 	 *
-	 * @since 0.2
+	 * @since 0.2.0
 	 *
 	 */
 	private function update_settings() {
-		if( $_SERVER['REQUEST_METHOD'] == 'POST' && isset( $_POST['tabify'] ) && check_admin_referer( plugin_basename( __FILE__ ), 'tabify_edit_screen_nonce' ) ) {
+		if ( $_SERVER['REQUEST_METHOD'] == 'POST' && isset( $_POST['tabify'] ) && check_admin_referer( plugin_basename( __FILE__ ), 'tabify_edit_screen_nonce' ) ) {
 			$options = $_POST['tabify'];
 
 			$options = apply_filters( 'tabify_settings_update', $options );
@@ -105,12 +105,13 @@ class Tabify_Edit_Screen_Admin {
 	/**
 	 * Load additional support for plugins that have unique code
 	 *
-	 * @since 0.4
+	 * @since 0.4.0
 	 */
 	private function load_plugin_support() {
-		if( apply_filters( 'tabify_plugin_support', false ) ) {
+		if ( apply_filters( 'tabify_plugin_support', false ) ) {
 			include 'plugin-support.php';
 			new Tabify_Edit_Screen_Plugin_Support();
 		}
 	}
+
 }

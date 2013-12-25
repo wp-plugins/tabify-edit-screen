@@ -5,9 +5,9 @@ class Tabify_Edit_Screen_Settings_Posttypes extends Tabify_Edit_Screen_Settings_
 	/**
 	 * Loads the base with the type
 	 *
-	 * @since 0.4
+	 * @since 0.4.0
 	 */
-	function __construct() {
+	public function __construct() {
 		parent::__construct('posttypes');
 
 		add_filter( 'tabify_settings_update', array( $this, 'save_settings' ) );
@@ -20,7 +20,7 @@ class Tabify_Edit_Screen_Settings_Posttypes extends Tabify_Edit_Screen_Settings_
 	/**
 	 * Loads all the posttypes as sections
 	 *
-	 * @since 0.4
+	 * @since 0.4.0
 	 */
 	protected function load_sections() {
 		$args = array(
@@ -31,8 +31,8 @@ class Tabify_Edit_Screen_Settings_Posttypes extends Tabify_Edit_Screen_Settings_
 		$posttypes_objects = apply_filters( 'tabify_posttypes', $posttypes_objects );
 
 		$posttypes = array();
-		foreach( $posttypes_objects as $posttype_object ) {
-			if( is_object( $posttype_object ) ) {
+		foreach ( $posttypes_objects as $posttype_object ) {
+			if ( is_object( $posttype_object ) ) {
 				$posttypes[ $posttype_object->name ] = $posttype_object->label;
 			}
 		}
@@ -43,7 +43,7 @@ class Tabify_Edit_Screen_Settings_Posttypes extends Tabify_Edit_Screen_Settings_
 	/**
 	 * Gets all the metaboxes that are registered
 	 *
-	 * @since 0.1
+	 * @since 0.1.0
 	 */
 	private function get_metaboxes() {
 		global $wp_meta_boxes;
@@ -51,7 +51,7 @@ class Tabify_Edit_Screen_Settings_Posttypes extends Tabify_Edit_Screen_Settings_
 		$metaboxes = array();
 		$sections  = $this->get_sections();
 
-		foreach( $sections as $posttype => $label ) {
+		foreach ( $sections as $posttype => $label ) {
 			$metaboxes[ $posttype ] = array();
 
 			if ( post_type_supports( $posttype, 'title' ) ) {
@@ -69,10 +69,10 @@ class Tabify_Edit_Screen_Settings_Posttypes extends Tabify_Edit_Screen_Settings_
 			do_action( 'add_meta_boxes_' . $posttype, null );
 		}
 
-		foreach( $wp_meta_boxes as $posttype => $context ) {
-			foreach( $context as $priorities ) {
-				foreach( $priorities as $priority => $_metaboxes ) {
-					foreach( $_metaboxes as $metabox ) {
+		foreach ( $wp_meta_boxes as $posttype => $context ) {
+			foreach ( $context as $priorities ) {
+				foreach ( $priorities as $priority => $_metaboxes ) {
+					foreach ( $_metaboxes as $metabox ) {
 						$metaboxes[ $posttype ][ $metabox['id'] ] = $metabox['title'];
 					}
 				}
@@ -92,18 +92,19 @@ class Tabify_Edit_Screen_Settings_Posttypes extends Tabify_Edit_Screen_Settings_
 	/**
 	 * Sanitize the options array to be how we expect it to be
 	 *
-	 * @since 0.2
+	 * @since 0.2.0
 	 *
 	 * @param array $posttypes Raw options array
 	 * @return array filtered options array
 	 */
 	private function escape( $posttypes ) {
-		$posttypes_keys = array_keys( $posttypes );
+		$posttypes_keys   = array_keys( $posttypes );
 		$amount_posttypes = count( $posttypes );
-		for( $i = 0; $i < $amount_posttypes; $i++ ) {
+
+		for ( $i = 0; $i < $amount_posttypes; $i++ ) {
 			$key = $posttypes_keys[ $i ];
 
-			if( isset( $posttypes[ $key ]['show'] ) && $posttypes[ $key ]['show'] == 1 ) {
+			if ( isset( $posttypes[ $key ]['show'] ) && $posttypes[ $key ]['show'] == 1 ) {
 				$posttypes[ $key ]['show'] = intval( $posttypes[ $key ]['show'] );
 			}
 			else {
@@ -111,32 +112,34 @@ class Tabify_Edit_Screen_Settings_Posttypes extends Tabify_Edit_Screen_Settings_
 			}
 
 			$amount_tabs = count( $posttypes[ $key ]['tabs'] );
-			for( $j = 0; $j < $amount_tabs; $j++ ) {
-				if( ! isset( $posttypes[ $key ]['tabs'][ $j ] ) )
+			for ( $j = 0; $j < $amount_tabs; $j++ ) {
+				if ( ! isset( $posttypes[ $key ]['tabs'][ $j ] ) ) {
 					continue;
+				}
 
 				$posttypes[ $key ]['tabs'][ $j ]['title'] = stripslashes( $posttypes[ $key ]['tabs'][ $j ]['title'] );
 				$posttypes[ $key ]['tabs'][ $j ]['title'] = wp_strip_all_tags(  $posttypes[ $key ]['tabs'][ $j ]['title'] );
 
-				if( !isset( $posttypes[ $key ]['tabs'][ $j ]['items'] ) || count( $posttypes[ $key ]['tabs'][ $j ]['items'] ) == 0 ) {
-					if( $posttypes[ $key ]['tabs'][ $j ]['title'] == '' )
+				if ( ! isset( $posttypes[ $key ]['tabs'][ $j ]['items'] ) || count( $posttypes[ $key ]['tabs'][ $j ]['items'] ) == 0 ) {
+					if ( $posttypes[ $key ]['tabs'][ $j ]['title'] == '' ) {
 						unset( $posttypes[ $key ]['tabs'][ $j ] );
+					}
 
 					continue;
 				}
 
 				$amount_metaboxes = count( $posttypes[ $key ]['tabs'][ $j ]['items'] );
 
-				for( $k = 0; $k < $amount_metaboxes; $k++ ) {
+				for ( $k = 0; $k < $amount_metaboxes; $k++ ) {
 					// Should the metabox be moved. Only applies when browser doesn't support Javascript
-					if(
+					if (
 						isset( $posttypes[ $key ]['tabs'][ $j ]['items_tab'][ $k ] ) &&
 						$posttypes[ $key ]['tabs'][ $j ]['items_tab'][ $k ] != $j &&
 						isset( $posttypes[ $key ]['tabs'][ intval( $posttypes[ $key ]['tabs'][ $j ]['items_tab'][ $k ] ) ] )
 					) {
 						$new_tab_key = intval( $posttypes[ $key ]['tabs'][ $j ]['items_tab'][ $k ] );
 
-						if( ! isset( $posttypes[ $key ]['tabs'][ $new_tab_key ]['items'] ) ) {
+						if ( ! isset( $posttypes[ $key ]['tabs'][ $new_tab_key ]['items'] ) ) {
 							$posttypes[ $key ]['tabs'][ $new_tab_key ]['items'] = array();
 							$metaboxes_in_new_tab = 0;
 						}
@@ -162,57 +165,72 @@ class Tabify_Edit_Screen_Settings_Posttypes extends Tabify_Edit_Screen_Settings_
 	 * Gets all the default WordPress metaboxes
 	 * Little bit hackish but it works. Hopefully one day there will be a method for this in core.
 	 *
-	 * @since 0.1
+	 * @since 0.1.0
 	 */
 	private function load_default_metaboxes( $post_type ) {
 		add_meta_box( 'submitdiv', __('Publish'), 'post_submit_meta_box', $post_type, 'side', 'core' );
 
-		if ( current_theme_supports( 'post-formats' ) && post_type_supports( $post_type, 'post-formats' ) )
+		if ( current_theme_supports( 'post-formats' ) && post_type_supports( $post_type, 'post-formats' ) ) {
 			add_meta_box( 'formatdiv', _x( 'Format', 'post format' ), 'post_format_meta_box', $post_type, 'side', 'core' );
+		}
 
 		// all taxonomies
-		foreach ( get_object_taxonomies($post_type) as $tax_name ) {
-			$taxonomy = get_taxonomy($tax_name);
-			if ( ! $taxonomy->show_ui )
+		foreach ( get_object_taxonomies( $post_type ) as $tax_name ) {
+			$taxonomy = get_taxonomy( $tax_name );
+
+			if ( ! $taxonomy->show_ui ) {
 				continue;
+			}
 
 			$label = $taxonomy->labels->name;
 
-			if ( !is_taxonomy_hierarchical($tax_name) )
-				add_meta_box('tagsdiv-' . $tax_name, $label, 'post_tags_meta_box', $post_type, 'side', 'core', array( 'taxonomy' => $tax_name ));
-			else
-				add_meta_box($tax_name . 'div', $label, 'post_categories_meta_box', $post_type, 'side', 'core', array( 'taxonomy' => $tax_name ));
+			if ( ! is_taxonomy_hierarchical( $tax_name ) ) {
+				add_meta_box( 'tagsdiv-' . $tax_name, $label, 'post_tags_meta_box', $post_type, 'side', 'core', array( 'taxonomy' => $tax_name ) );
+			}
+			else {
+				add_meta_box( $tax_name . 'div', $label, 'post_categories_meta_box', $post_type, 'side', 'core', array( 'taxonomy' => $tax_name ) );
+			}
 		}
 
-		if ( post_type_supports($post_type, 'page-attributes') )
-			add_meta_box('pageparentdiv', 'page' == $post_type ? __('Page Attributes') : __('Attributes'), 'page_attributes_meta_box', $post_type, 'side', 'core');
+		if ( post_type_supports( $post_type, 'page-attributes' ) ) {
+			add_meta_box( 'pageparentdiv', 'page' == $post_type ? __( 'Page Attributes' ) : __( 'Attributes' ), 'page_attributes_meta_box', $post_type, 'side', 'core' );
+		}
 
-		if ( current_theme_supports( 'post-thumbnails', $post_type ) && post_type_supports( $post_type, 'thumbnail' ) )
-				add_meta_box('postimagediv', __('Featured Image'), 'post_thumbnail_meta_box', $post_type, 'side', 'low');
+		if ( current_theme_supports( 'post-thumbnails', $post_type ) && post_type_supports( $post_type, 'thumbnail' ) ) {
+			add_meta_box( 'postimagediv', __('Featured Image'), 'post_thumbnail_meta_box', $post_type, 'side', 'low' );
+		}
 
-		if ( post_type_supports($post_type, 'excerpt') )
-			add_meta_box('postexcerpt', __('Excerpt'), 'post_excerpt_meta_box', $post_type, 'normal', 'core');
+		if ( post_type_supports( $post_type, 'excerpt' ) ) {
+			add_meta_box( 'postexcerpt', __('Excerpt'), 'post_excerpt_meta_box', $post_type, 'normal', 'core' );
+		}
 
-		if ( post_type_supports($post_type, 'trackbacks') )
-			add_meta_box('trackbacksdiv', __('Send Trackbacks'), 'post_trackback_meta_box', $post_type, 'normal', 'core');
+		if ( post_type_supports($post_type, 'trackbacks') ) {
+			add_meta_box( 'trackbacksdiv', __('Send Trackbacks'), 'post_trackback_meta_box', $post_type, 'normal', 'core' );
+		}
 
-		if ( post_type_supports($post_type, 'custom-fields') )
-			add_meta_box('postcustom', __('Custom Fields'), 'post_custom_meta_box', $post_type, 'normal', 'core');
+		if ( post_type_supports($post_type, 'custom-fields') ) {
+			add_meta_box( 'postcustom', __('Custom Fields'), 'post_custom_meta_box', $post_type, 'normal', 'core' );
+		}
 
 		do_action('dbx_post_advanced');
-		if ( post_type_supports($post_type, 'comments') )
-			add_meta_box('commentstatusdiv', __('Discussion'), 'post_comment_status_meta_box', $post_type, 'normal', 'core');
 
-		if ( post_type_supports($post_type, 'comments') )
-			add_meta_box('commentsdiv', __('Comments'), 'post_comment_meta_box', $post_type, 'normal', 'core');
+		if ( post_type_supports($post_type, 'comments') ) {
+			add_meta_box( 'commentstatusdiv', __('Discussion'), 'post_comment_status_meta_box', $post_type, 'normal', 'core' );
+		}
 
-		add_meta_box('slugdiv', __('Slug'), 'post_slug_meta_box', $post_type, 'normal', 'core');
+		if ( post_type_supports($post_type, 'comments') ) {
+			add_meta_box( 'commentsdiv', __('Comments'), 'post_comment_meta_box', $post_type, 'normal', 'core' );
+		}
 
-		if ( post_type_supports($post_type, 'author') )
-			add_meta_box('authordiv', __('Author'), 'post_author_meta_box', $post_type, 'normal', 'core');
+		add_meta_box( 'slugdiv', __('Slug'), 'post_slug_meta_box', $post_type, 'normal', 'core' );
 
-		if ( post_type_supports($post_type, 'revisions') )
-			add_meta_box('revisionsdiv', __('Revisions'), 'post_revisions_meta_box', $post_type, 'normal', 'core');
+		if ( post_type_supports($post_type, 'author') ) {
+			add_meta_box( 'authordiv', __('Author'), 'post_author_meta_box', $post_type, 'normal', 'core' );
+		}
+
+		if ( post_type_supports($post_type, 'revisions') ) {
+			add_meta_box( 'revisionsdiv', __('Revisions'), 'post_revisions_meta_box', $post_type, 'normal', 'core' );
+		}
 	}
 
 	/**
@@ -220,11 +238,13 @@ class Tabify_Edit_Screen_Settings_Posttypes extends Tabify_Edit_Screen_Settings_
 	 *
 	 * @return array All the metaboxes id's in an array
 	 *
-	 * @since 0.4
+	 * @since 0.4.0
 	 */
 	public static function get_default_items( $post_type = '' ) {
 		$defaults = array( 'titlediv', 'submitdiv' ); //, 'postdivrich'
 		$defaults = apply_filters( 'tabify_default_metaboxes', $defaults, $post_type );
+
 		return apply_filters( 'tabify_default_metaboxes_' . $post_type , $defaults );
 	}
+
 }

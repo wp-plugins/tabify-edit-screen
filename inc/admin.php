@@ -8,6 +8,15 @@ class Tabify_Edit_Screen_Admin {
 	private $options;
 
 	/**
+	 * Load helper methods
+	 *
+	 * @since 0.8.2
+	 */
+	public function __construct() {
+		$this->load_plugin_support();
+	}
+
+	/**
 	 * Adds a option page to manage all the tabs
 	 *
 	 * @since 0.1.0
@@ -25,8 +34,6 @@ class Tabify_Edit_Screen_Admin {
 		if ( ! current_user_can( 'manage_options' ) ) {
 			wp_die( __( 'You do not have sufficient permissions to manage options for this site.' ) );
 		}
-
-		$this->load_plugin_support();
 
 		wp_register_script( 'tabify-edit-screen-admin', plugins_url( '/js/admin.js', dirname( __FILE__ ) ), array( 'jquery', 'jquery-ui-sortable' ), '1.0' );
 		wp_enqueue_script( 'tabify-edit-screen-admin' );
@@ -55,7 +62,10 @@ class Tabify_Edit_Screen_Admin {
 		echo '<input type="hidden" id="tabify_edit_screen_nojs" name="tabify_edit_screen_nojs" value="1" />';
 
 		$tabs = array(
-			'posttypes' => array( 'title' => __('Post types', 'tabify-edit-screen' ), 'class' => 'Tabify_Edit_Screen_Settings_Posttypes' )
+			'posttypes' => array(
+				'title' => __('Post types', 'tabify-edit-screen' ),
+				'class' => 'Tabify_Edit_Screen_Settings_Posttypes'
+			)
 		);
 		$tabs = apply_filters( 'tabify_settings_tabs', $tabs );
 
@@ -72,12 +82,12 @@ class Tabify_Edit_Screen_Admin {
 			$this->update_settings();
 
 			echo '<div id="tabify-settings">';
-				echo '<div id="tabifyboxes">';
-				echo $settings_screen->get_section();
-				echo '</div>';
-
 				echo '<div id="tabify-submenu">';
 				echo $settings_screen->get_sections_menu();
+				echo '</div>';
+
+				echo '<div id="tabifyboxes">';
+				echo $settings_screen->get_section();
 				echo '</div>';
 			echo '</div>';
 
@@ -108,10 +118,20 @@ class Tabify_Edit_Screen_Admin {
 	 * @since 0.4.0
 	 */
 	private function load_plugin_support() {
-		if ( apply_filters( 'tabify_plugin_support', false ) ) {
-			include 'plugin-support.php';
-			new Tabify_Edit_Screen_Plugin_Support();
+		global $pagenow;
+
+		// Only load this when the user needs it.
+		if ( ! apply_filters( 'tabify_plugin_support', false ) ) {
+			return;
 		}
+
+		// Only load on our page.
+		if ( 'options-general.php' != $pagenow || ! isset( $_GET['page'] ) || 'tabify-edit-screen' != $_GET['page'] ) {
+			return;
+		}
+
+		include 'plugin-support.php';
+		new Tabify_Edit_Screen_Plugin_Support();
 	}
 
 }

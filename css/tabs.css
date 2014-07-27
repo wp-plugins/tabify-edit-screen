@@ -1,0 +1,115 @@
+.tab-vertical {
+
+}
+.tab-vertical a {
+	background: #eee;
+	border: 1px solid #DFDFDF;
+	display: block;
+	margin: 0 0 10px 0;
+	font-size: 16px;
+	line-height: 20px;
+
+	-webkit-border-radius: 3px;
+	border-radius: 3px;
+}
+
+.tab-vertical .nav-tab:hover,
+.tab-vertical .nav-tab-active {
+	border-color: #ccc;
+}
+
+.js #poststuff .tabifybox-hide,
+.js .tabifybox-hide {
+	display: none;
+}
+
+
+#tabify-settings {
+	margin: 0 5px 0 300px;
+}
+
+#tabifyboxes {
+	float: right;
+	width: 100%;
+}
+
+#tabify-submenu {
+	float: left;
+	margin-left: -300px;
+	width: 280px;
+}
+
+
+.tabify_tab {
+	margin-bottom: 20px;
+	padding: 0px 10px 5px 10px;
+}
+
+.tabify_tab h2 {
+	float: left;
+	font-size: 20px;
+	line-height: 24px;
+	padding-bottom: 0px;
+}
+
+#tabifyboxes #create_tab {
+	margin-right: 10px;
+}
+
+.tabify-remove-tab {
+	color: #BC0B0B;
+	float: right;
+	line-height: normal;
+	margin: 17px 5px 0px 0;
+}
+
+.tabify-remove-accept {
+	clear: both;
+	display:none;
+}
+
+.tabify_control .tabify_tab {
+	background: #f9f9f9;
+}
+
+.tabify_control .menu-item-handle {
+	overflow: visible;
+	width: auto;
+}
+
+.tabify_control ul {
+	margin: 0px;
+	padding: 6px 0px 0px;
+}
+
+.tabify_control .item-order {
+	float: right;
+	margin-top: 0px;
+	margin-right: 10px;
+}
+
+.tabify_control .item-order a {
+	text-decoration: none;
+}
+
+#second-submit {
+	float: right;
+	margin-top: 14px;
+}
+
+
+/*.postbox-container .meta-box-sortables.empty-container,*/
+#side-sortables.empty-container {
+	border: 0px;
+	height: auto;
+}
+
+
+
+.admin-color-mp6 .tab-vertical a {
+	background: #ddd;
+}
+
+.admin-color-mp6 .tab-vertical .nav-tab-active {
+	background: #fff;
+}

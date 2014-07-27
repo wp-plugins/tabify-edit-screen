@@ -1,0 +1,124 @@
+# Copyright (C) 2012 Tabify edit screen
+# This file is distributed under the same license as the Tabify edit screen package.
+msgid ""
+msgstr ""
+"Project-Id-Version: Tabify edit screen 0.4-dev\n"
+"Report-Msgid-Bugs-To: http://wordpress.org/tag/tabify-edit-screen\n"
+"POT-Creation-Date: 2012-11-05 22:44:13+00:00\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"PO-Revision-Date: 2012-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+
+#. #-#-#-#-#  tabify-edit-screen.pot (Tabify edit screen 0.4-dev)  #-#-#-#-#
+#. Plugin Name of the plugin/theme
+#: inc/admin.php:13
+msgid "Tabify edit screen"
+msgstr ""
+
+#: inc/admin.php:23
+msgid "You do not have sufficient permissions to manage options for this site."
+msgstr ""
+
+#: inc/admin.php:33 inc/settings-posttype.php:90
+msgid "Remove"
+msgstr ""
+
+#: inc/admin.php:33 inc/settings-posttype.php:84
+msgid "Choose title"
+msgstr ""
+
+#: inc/admin.php:169
+msgid "Post types"
+msgstr ""
+
+#: inc/settings-posttype.php:56
+msgid "Others"
+msgstr ""
+
+#: inc/settings-posttype.php:74
+msgid "Show tabs in this post type."
+msgstr ""
+
+#: inc/settings-posttype.php:144
+msgid "Create a new tab"
+msgstr ""
+
+#: inc/settings-posttype.php:164
+msgid "Title"
+msgstr ""
+
+#: inc/settings-posttype.php:168
+msgid "Editor"
+msgstr ""
+
+#: inc/settings-posttype.php:199
+msgid "Publish"
+msgstr ""
+
+#: inc/settings-posttype.php:202
+msgctxt "post format"
+msgid "Format"
+msgstr ""
+
+#: inc/settings-posttype.php:219
+msgid "Page Attributes"
+msgstr ""
+
+#: inc/settings-posttype.php:219
+msgid "Attributes"
+msgstr ""
+
+#: inc/settings-posttype.php:222
+msgid "Featured Image"
+msgstr ""
+
+#: inc/settings-posttype.php:225
+msgid "Excerpt"
+msgstr ""
+
+#: inc/settings-posttype.php:228
+msgid "Send Trackbacks"
+msgstr ""
+
+#: inc/settings-posttype.php:231
+msgid "Custom Fields"
+msgstr ""
+
+#: inc/settings-posttype.php:235
+msgid "Discussion"
+msgstr ""
+
+#: inc/settings-posttype.php:238
+msgid "Comments"
+msgstr ""
+
+#: inc/settings-posttype.php:240
+msgid "Slug"
+msgstr ""
+
+#: inc/settings-posttype.php:243
+msgid "Author"
+msgstr ""
+
+#: inc/settings-posttype.php:246
+msgid "Revisions"
+msgstr ""
+
+#. Plugin URI of the plugin/theme
+msgid "http://wp-rockstars.com/plugin/tabify-edit-screen"
+msgstr ""
+
+#. Description of the plugin/theme
+msgid "Enables tabs in the edit screen and manage them from the back-end"
+msgstr ""
+
+#. Author of the plugin/theme
+msgid "Marko Heijnen"
+msgstr ""
+
+#. Author URI of the plugin/theme
+msgid "http://markoheijnen.com"
+msgstr ""

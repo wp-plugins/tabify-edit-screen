@@ -5,12 +5,12 @@ Plugin URI: http://rocksta.rs/plugin/tabify-edit-screen
 Description: Enables tabs in the edit screen and manage them from the back-end
 Author: Marko Heijnen
 Text Domain: tabify-edit-screen
-Version: 0.8.1
+Version: 0.8.3
 Author URI: http://markoheijnen.com
 */
 
 class Tabify_Edit_Screen {
-	public  $version = '0.8.0';
+	public  $version = '0.8.3';
 	public  $admin;
 	private $editscreen_tabs;
 	private $tab_location = 'default';
@@ -158,7 +158,7 @@ class Tabify_Edit_Screen {
 		}
 	}
 
-	function add_admin_body_class( $body ) {
+	public function add_admin_body_class( $body ) {
 		if ( $this->tab_location ) {
 			$body .= ' tabify_tab' . $this->tab_location;
 		}
@@ -191,7 +191,7 @@ class Tabify_Edit_Screen {
 	 * @since 0.5.0
 	 *
 	 */
-	function output_tabs() {
+	public function output_tabs() {
 		echo $this->submit_button();
 		echo $this->editscreen_tabs->get_tabs_with_container();
 	}
@@ -202,7 +202,7 @@ class Tabify_Edit_Screen {
 	 * @since 0.7.0
 	 *
 	 */
-	function submit_button() {
+	private function submit_button() {
 		$post = get_post();
 
 		$default = Tabify_Edit_Screen_Settings_Posttypes::get_default_items( $post->post_type );
@@ -242,7 +242,7 @@ class Tabify_Edit_Screen {
 	 * @since 0.1.0
 	 *
 	 */
-	function generate_javascript() {
+	public function generate_javascript() {
 		echo '<script type="text/javascript">';
 		echo 'jQuery(function($) {';
 		do_action( 'tabify_custom_javascript' );
@@ -252,4 +252,4 @@ class Tabify_Edit_Screen {
 
 }
 
-$tabify_edit_screen = new Tabify_Edit_Screen();
+$GLOBALS['tabify_edit_screen'] = new Tabify_Edit_Screen();
